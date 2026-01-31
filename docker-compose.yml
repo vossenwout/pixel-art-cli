@@ -1,0 +1,13 @@
+services:
+  dev:
+    build: .
+    image: pixel-art-cli-dev
+    container_name: pixel-art-cli-dev
+    working_dir: /workspace
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/workspace
+      - ${HOME}/.config/nvim:/root/.config/nvim:ro
+      - ${HOME}/.local/share/nvim:/root/.local/share/nvim
+      - ${HOME}/.cache/nvim:/root/.cache/nvim
