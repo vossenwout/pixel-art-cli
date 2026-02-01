@@ -2,10 +2,14 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
+
+	"pxcli/internal/config"
 )
 
 // NewRootCmd returns the root pxcli command.
 func NewRootCmd(version string) *cobra.Command {
+	var socketPath string
+
 	cmd := &cobra.Command{
 		Use:           "pxcli",
 		Short:         "pxcli is a pixel art CLI",
@@ -15,10 +19,19 @@ func NewRootCmd(version string) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmd.Help()
 		},
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			_, err := SocketPath(cmd)
+			return err
+		},
 	}
+
+	cmd.PersistentFlags().StringVar(&socketPath, "socket", config.DefaultSocketPath, "Unix socket path")
 
 	cmd.Version = version
 	cmd.SetVersionTemplate("{{.Version}}\n")
+
+	cmd.AddCommand(NewStartCmd())
+	cmd.AddCommand(NewDaemonCmd())
 
 	return cmd
 }

@@ -1,3 +1,5 @@
 - Completed T:1 scaffold: Go module, Cobra root command with --version, and unit tests for unknown command/usage and version.
 - Tests/run: `go test ./...` and `go build ./cmd/pxcli` pass.
-- Next: start T:2 defaults/config flags (socket/headless) and expand CLI/daemon structure.
+- Completed T:2 defaults/config: added `internal/config` with shared defaults/options, root `--socket` validation, and stub `start`/`daemon` commands with `--headless` flag; added unit tests for defaults and validation.
+- Tests/run: `go test ./...` passes.
+- Next: implement IPC protocol parsing (T:3) and begin command/daemon plumbing.

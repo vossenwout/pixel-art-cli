@@ -64,10 +64,10 @@ Allow the daemon PID file path to be overridden via internal configuration (no u
 
 **Acceptance criteria:**
 
-- [ ] Given no flags, when I run any client command, then it targets `/tmp/pxcli.sock` by default
-- [ ] Error: given `--socket` is an empty string, when I run any command, then the CLI exits non-zero and prints a helpful validation error
-- [ ] Given default config, when the daemon mode is resolved, then headless is true
-- [ ] Tests: tests can configure socket/PID paths to temp locations (no test reads/writes `/tmp/pxcli.pid`) and `go test ./...` passes
+- [x] Given no flags, when I run any client command, then it targets `/tmp/pxcli.sock` by default
+- [x] Error: given `--socket` is an empty string, when I run any command, then the CLI exits non-zero and prints a helpful validation error
+- [x] Given default config, when the daemon mode is resolved, then headless is true
+- [x] Tests: tests can configure socket/PID paths to temp locations (no test reads/writes `/tmp/pxcli.pid`) and `go test ./...` passes
 
 ### T:3: Implement IPC protocol parsing and response formatting
 
