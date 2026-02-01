@@ -218,9 +218,9 @@ It must run with no display environment and rely on the in-memory canvas plus `e
 
 **Acceptance criteria:**
 
-- [ ] Given the headless runtime is started, when a client sends a valid command, then it responds `ok` and updates the canvas state
-- [ ] Given `DISPLAY` is unset, when the headless runtime starts, then it still serves requests normally
-- [ ] Tests: headless runtime start/stop is covered in tests and `go test ./...` passes
+- [x] Given the headless runtime is started, when a client sends a valid command, then it responds `ok` and updates the canvas state
+- [x] Given `DISPLAY` is unset, when the headless runtime starts, then it still serves requests normally
+- [x] Tests: headless runtime start/stop is covered in tests and `go test ./...` passes
 
 ### T:15: Implement `pxcli daemon` subcommand (hidden internal entrypoint)
 

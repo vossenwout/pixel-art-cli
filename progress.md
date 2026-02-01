@@ -28,3 +28,6 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:13 graceful shutdown: added daemon runtime with stop/signal handling, cleanup of PID/socket, and tests for stop request + SIGINT shutdown.
 - Tests/run: `go test ./...` passes.
+- Completed T:14 headless runtime: added `daemon.RunHeadless` wiring canvas/history/server/runtime plus tests for command handling and DISPLAY unset.
+- Tests/run: `go test ./...` passes.
+- Next: implement `pxcli daemon` command wiring/flag validation (T:15) and client transport (T:16).
