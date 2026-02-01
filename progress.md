@@ -14,3 +14,5 @@
 - Next: implement `fill_rect` (T:6) and `line` (T:7) drawing operations atop canvas.
 - Completed T:6 fill_rect: added Canvas FillRect with size/bounds validation and unit tests for coverage/error codes.
 - Tests/run: `go test ./...` passes.
+- Completed T:7 line: added Canvas Line (Bresenham) with endpoint bounds validation and unit tests for horizontal/vertical/diagonal lines plus out_of_bounds errors.
+- Tests/run: `go test ./...` passes.

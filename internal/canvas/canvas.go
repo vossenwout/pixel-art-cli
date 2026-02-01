@@ -91,9 +91,55 @@ func (c *Canvas) FillRect(x, y, w, h int, value color.RGBA) error {
 	return nil
 }
 
+// Line draws a line between two points, inclusive of endpoints.
+func (c *Canvas) Line(x1, y1, x2, y2 int, value color.RGBA) error {
+	if _, err := c.index(x1, y1); err != nil {
+		return err
+	}
+	if _, err := c.index(x2, y2); err != nil {
+		return err
+	}
+
+	dx := absInt(x2 - x1)
+	dy := absInt(y2 - y1)
+	sx := -1
+	if x1 < x2 {
+		sx = 1
+	}
+	sy := -1
+	if y1 < y2 {
+		sy = 1
+	}
+	errVal := dx - dy
+
+	for {
+		c.pixels[y1*c.width+x1] = value
+		if x1 == x2 && y1 == y2 {
+			break
+		}
+		e2 := 2 * errVal
+		if e2 > -dy {
+			errVal -= dy
+			x1 += sx
+		}
+		if e2 < dx {
+			errVal += dx
+			y1 += sy
+		}
+	}
+	return nil
+}
+
 func (c *Canvas) index(x, y int) (int, error) {
 	if x < 0 || x >= c.width || y < 0 || y >= c.height {
 		return 0, Error{Code: "out_of_bounds", Message: fmt.Sprintf("pixel (%d,%d) outside canvas", x, y)}
 	}
 	return y*c.width + x, nil
+}
+
+func absInt(value int) int {
+	if value < 0 {
+		return -value
+	}
+	return value
 }

@@ -140,3 +140,110 @@ func TestCanvasFillRectErrors(t *testing.T) {
 		}
 	}
 }
+
+func TestCanvasLineHorizontal(t *testing.T) {
+	c, err := New(8, 8)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	red := color.RGBA{R: 255, G: 0, B: 0, A: 255}
+	if err := c.Line(0, 0, 3, 0, red); err != nil {
+		t.Fatalf("unexpected line error: %v", err)
+	}
+
+	for y := 0; y < c.Height(); y++ {
+		for x := 0; x < c.Width(); x++ {
+			got, err := c.GetPixel(x, y)
+			if err != nil {
+				t.Fatalf("unexpected get error at (%d,%d): %v", x, y, err)
+			}
+			shouldBeRed := y == 0 && x >= 0 && x <= 3
+			if shouldBeRed {
+				if got != red {
+					t.Fatalf("expected red at (%d,%d), got %v", x, y, got)
+				}
+			} else if got != (color.RGBA{}) {
+				t.Fatalf("expected zero color at (%d,%d), got %v", x, y, got)
+			}
+		}
+	}
+}
+
+func TestCanvasLineVertical(t *testing.T) {
+	c, err := New(6, 6)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	green := color.RGBA{R: 0, G: 255, B: 0, A: 255}
+	if err := c.Line(2, 1, 2, 4, green); err != nil {
+		t.Fatalf("unexpected line error: %v", err)
+	}
+
+	for y := 0; y < c.Height(); y++ {
+		for x := 0; x < c.Width(); x++ {
+			got, err := c.GetPixel(x, y)
+			if err != nil {
+				t.Fatalf("unexpected get error at (%d,%d): %v", x, y, err)
+			}
+			shouldBeGreen := x == 2 && y >= 1 && y <= 4
+			if shouldBeGreen {
+				if got != green {
+					t.Fatalf("expected green at (%d,%d), got %v", x, y, got)
+				}
+			} else if got != (color.RGBA{}) {
+				t.Fatalf("expected zero color at (%d,%d), got %v", x, y, got)
+			}
+		}
+	}
+}
+
+func TestCanvasLineDiagonal(t *testing.T) {
+	c, err := New(5, 5)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	blue := color.RGBA{R: 0, G: 0, B: 255, A: 255}
+	if err := c.Line(0, 0, 3, 3, blue); err != nil {
+		t.Fatalf("unexpected line error: %v", err)
+	}
+
+	for y := 0; y < c.Height(); y++ {
+		for x := 0; x < c.Width(); x++ {
+			got, err := c.GetPixel(x, y)
+			if err != nil {
+				t.Fatalf("unexpected get error at (%d,%d): %v", x, y, err)
+			}
+			shouldBeBlue := x == y && x >= 0 && x <= 3
+			if shouldBeBlue {
+				if got != blue {
+					t.Fatalf("expected blue at (%d,%d), got %v", x, y, got)
+				}
+			} else if got != (color.RGBA{}) {
+				t.Fatalf("expected zero color at (%d,%d), got %v", x, y, got)
+			}
+		}
+	}
+}
+
+func TestCanvasLineErrors(t *testing.T) {
+	c, err := New(4, 4)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	outOfBounds := [][4]int{
+		{0, 0, 4, 0},
+		{0, 0, 0, -1},
+		{-1, 0, 2, 2},
+	}
+	for _, coords := range outOfBounds {
+		if err := c.Line(coords[0], coords[1], coords[2], coords[3], color.RGBA{}); err == nil {
+			t.Fatalf("expected out_of_bounds error for line %v", coords)
+		} else if canvasErr, ok := err.(Error); !ok || canvasErr.Code != "out_of_bounds" {
+			t.Fatalf("expected out_of_bounds for line %v, got %v", coords, err)
+		}
+	}
+}

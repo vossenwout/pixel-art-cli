@@ -128,9 +128,9 @@ Validate both endpoints are within bounds; if not, return `out_of_bounds`.
 
 **Acceptance criteria:**
 
-- [ ] Given a 8x8 canvas, when I draw `line 0 0 3 0 red`, then pixels (0,0), (1,0), (2,0), (3,0) are red
-- [ ] Error: given x2 is outside the canvas, when `line` is executed, then the daemon returns `err out_of_bounds <message>`
-- [ ] Tests: horizontal/vertical/diagonal lines are unit tested and `go test ./...` passes
+- [x] Given a 8x8 canvas, when I draw `line 0 0 3 0 red`, then pixels (0,0), (1,0), (2,0), (3,0) are red
+- [x] Error: given x2 is outside the canvas, when `line` is executed, then the daemon returns `err out_of_bounds <message>`
+- [x] Tests: horizontal/vertical/diagonal lines are unit tested and `go test ./...` passes
 
 ### T:8: Implement undo/redo history for mutating operations
 
