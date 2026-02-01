@@ -70,6 +70,27 @@ func (c *Canvas) Clear(value color.RGBA) {
 	}
 }
 
+// FillRect fills a rectangle with the provided color.
+func (c *Canvas) FillRect(x, y, w, h int, value color.RGBA) error {
+	if w <= 0 || h <= 0 {
+		return Error{Code: "invalid_args", Message: "rect width and height must be positive"}
+	}
+	if x < 0 || y < 0 || x+w > c.width || y+h > c.height {
+		return Error{
+			Code:    "out_of_bounds",
+			Message: fmt.Sprintf("rect (%d,%d) size %dx%d outside canvas", x, y, w, h),
+		}
+	}
+
+	for row := y; row < y+h; row++ {
+		start := row*c.width + x
+		for i := 0; i < w; i++ {
+			c.pixels[start+i] = value
+		}
+	}
+	return nil
+}
+
 func (c *Canvas) index(x, y int) (int, error) {
 	if x < 0 || x >= c.width || y < 0 || y >= c.height {
 		return 0, Error{Code: "out_of_bounds", Message: fmt.Sprintf("pixel (%d,%d) outside canvas", x, y)}

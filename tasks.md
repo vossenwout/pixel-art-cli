@@ -116,9 +116,9 @@ Validate that `w>0`, `h>0`, and the full rectangle lies within the canvas; other
 
 **Acceptance criteria:**
 
-- [ ] Given a 8x8 canvas, when I fill_rect 2 3 3 2 with blue, then pixels (2..4,3..4) are blue and others are unchanged
-- [ ] Error: given `w<=0` or a rectangle that exceeds canvas bounds, when `fill_rect` is executed, then the daemon returns `err out_of_bounds <message>` (or `err invalid_args <message>` for non-positive sizes)
-- [ ] Tests: fill_rect behavior and error cases are unit tested and `go test ./...` passes
+- [x] Given a 8x8 canvas, when I fill_rect 2 3 3 2 with blue, then pixels (2..4,3..4) are blue and others are unchanged
+- [x] Error: given `w<=0` or a rectangle that exceeds canvas bounds, when `fill_rect` is executed, then the daemon returns `err out_of_bounds <message>` (or `err invalid_args <message>` for non-positive sizes)
+- [x] Tests: fill_rect behavior and error cases are unit tested and `go test ./...` passes
 
 ### T:7: Implement `line` drawing operation
 

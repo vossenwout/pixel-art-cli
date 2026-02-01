@@ -75,3 +75,68 @@ func TestCanvasClear(t *testing.T) {
 		}
 	}
 }
+
+func TestCanvasFillRect(t *testing.T) {
+	c, err := New(8, 8)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	blue := color.RGBA{R: 0, G: 0, B: 255, A: 255}
+	if err := c.FillRect(2, 3, 3, 2, blue); err != nil {
+		t.Fatalf("unexpected fill error: %v", err)
+	}
+
+	for y := 0; y < c.Height(); y++ {
+		for x := 0; x < c.Width(); x++ {
+			got, err := c.GetPixel(x, y)
+			if err != nil {
+				t.Fatalf("unexpected get error at (%d,%d): %v", x, y, err)
+			}
+			inRect := x >= 2 && x <= 4 && y >= 3 && y <= 4
+			if inRect {
+				if got != blue {
+					t.Fatalf("expected blue at (%d,%d), got %v", x, y, got)
+				}
+			} else if got != (color.RGBA{}) {
+				t.Fatalf("expected zero color at (%d,%d), got %v", x, y, got)
+			}
+		}
+	}
+}
+
+func TestCanvasFillRectErrors(t *testing.T) {
+	c, err := New(4, 4)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	invalidArgs := [][4]int{
+		{0, 0, 0, 1},
+		{0, 0, 1, 0},
+		{0, 0, -1, 1},
+		{0, 0, 1, -1},
+	}
+	for _, rect := range invalidArgs {
+		if err := c.FillRect(rect[0], rect[1], rect[2], rect[3], color.RGBA{}); err == nil {
+			t.Fatalf("expected invalid_args error for rect %v", rect)
+		} else if canvasErr, ok := err.(Error); !ok || canvasErr.Code != "invalid_args" {
+			t.Fatalf("expected invalid_args for rect %v, got %v", rect, err)
+		}
+	}
+
+	outOfBounds := [][4]int{
+		{-1, 0, 1, 1},
+		{0, -1, 1, 1},
+		{0, 0, 5, 1},
+		{0, 0, 1, 5},
+		{3, 3, 2, 1},
+	}
+	for _, rect := range outOfBounds {
+		if err := c.FillRect(rect[0], rect[1], rect[2], rect[3], color.RGBA{}); err == nil {
+			t.Fatalf("expected out_of_bounds error for rect %v", rect)
+		} else if canvasErr, ok := err.(Error); !ok || canvasErr.Code != "out_of_bounds" {
+			t.Fatalf("expected out_of_bounds for rect %v, got %v", rect, err)
+		}
+	}
+}

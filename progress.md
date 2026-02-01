@@ -12,3 +12,5 @@
 - Completed T:5 canvas model: added `internal/canvas` with bounds-checked get/set/clear, structured errors, and unit tests.
 - Tests/run: `go test ./...` passes.
 - Next: implement `fill_rect` (T:6) and `line` (T:7) drawing operations atop canvas.
+- Completed T:6 fill_rect: added Canvas FillRect with size/bounds validation and unit tests for coverage/error codes.
+- Tests/run: `go test ./...` passes.
