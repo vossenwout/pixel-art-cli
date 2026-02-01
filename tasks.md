@@ -164,13 +164,13 @@ Support: `set_pixel`, `get_pixel`, `fill_rect`, `line`, `clear [color]`, `export
 
 **Acceptance criteria:**
 
-- [ ] Given `get_pixel 1 2` on a known canvas, when the handler executes it, then it returns `ok #rrggbbaa` matching the stored pixel
-- [ ] Error: given a command with the wrong arg count (e.g., `set_pixel 1 2`), when it is handled, then the response is `err invalid_args <message>`
-- [ ] Error: given an unknown command (e.g., `nope`), when it is handled, then the response is `err invalid_command <message>`
-- [ ] Output: given a successful mutating command, when handled, then the response is exactly `ok` (single line)
-- [ ] Given `clear` with no args, when handled, then the canvas is cleared to transparent and the response is `ok`
-- [ ] Given `stop`, when handled, then it responds `ok` and triggers daemon shutdown
-- [ ] Tests: command handler behavior is unit tested (including error codes) and `go test ./...` passes
+- [x] Given `get_pixel 1 2` on a known canvas, when the handler executes it, then it returns `ok #rrggbbaa` matching the stored pixel
+- [x] Error: given a command with the wrong arg count (e.g., `set_pixel 1 2`), when it is handled, then the response is `err invalid_args <message>`
+- [x] Error: given an unknown command (e.g., `nope`), when it is handled, then the response is `err invalid_command <message>`
+- [x] Output: given a successful mutating command, when handled, then the response is exactly `ok` (single line)
+- [x] Given `clear` with no args, when handled, then the canvas is cleared to transparent and the response is `ok`
+- [x] Given `stop`, when handled, then it responds `ok` and triggers daemon shutdown
+- [x] Tests: command handler behavior is unit tested (including error codes) and `go test ./...` passes
 
 ### T:11: Implement Unix domain socket server (one request per connection)
 

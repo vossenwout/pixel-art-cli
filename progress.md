@@ -20,3 +20,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:9 PNG export: added canvas ExportPNG with PNG encoding and unit tests for pixel fidelity + io errors.
 - Tests/run: `go test ./...` passes.
+- Completed T:10 command handler: added daemon handler mapping protocol requests to canvas operations, error mapping, and stop callback support with unit tests.
+- Tests/run: `go test ./...` passes.
