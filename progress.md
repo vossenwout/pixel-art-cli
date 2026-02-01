@@ -30,4 +30,6 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:14 headless runtime: added `daemon.RunHeadless` wiring canvas/history/server/runtime plus tests for command handling and DISPLAY unset.
 - Tests/run: `go test ./...` passes.
-- Next: implement `pxcli daemon` command wiring/flag validation (T:15) and client transport (T:16).
+- Completed T:15 daemon command: added size/scale validation, headless wiring, and CLI tests that start a headless daemon on a temp socket/PID.
+- Tests/run: `go test ./...` passes.
+- Next: implement client transport (T:16) and `pxcli start` command (T:17).

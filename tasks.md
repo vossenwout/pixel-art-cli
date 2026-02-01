@@ -230,10 +230,10 @@ Support flags: `--size 32x32`, `--scale 10` (reserved for future windowed mode),
 
 **Acceptance criteria:**
 
-- [ ] Given `pxcli daemon --size 32x32 --headless`, when it starts, then it listens on the socket and serves requests
-- [ ] Error: given an invalid size string (e.g., `--size 0x10` or `--size 10`), when it starts, then it exits non-zero and prints a helpful validation error
-- [ ] Error: given an invalid scale (e.g., `--scale 0` or `--scale -1`), when it starts, then it exits non-zero and prints a helpful validation error
-- [ ] Tests: size parsing/validation is unit tested and `go test ./...` passes
+- [x] Given `pxcli daemon --size 32x32 --headless`, when it starts, then it listens on the socket and serves requests
+- [x] Error: given an invalid size string (e.g., `--size 0x10` or `--size 10`), when it starts, then it exits non-zero and prints a helpful validation error
+- [x] Error: given an invalid scale (e.g., `--scale 0` or `--scale -1`), when it starts, then it exits non-zero and prints a helpful validation error
+- [x] Tests: size parsing/validation is unit tested and `go test ./...` passes
 
 ### T:16: Implement CLI client transport (connect/send/receive)
 
