@@ -24,3 +24,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:11 socket server: added Unix domain socket server handling one request per connection plus integration tests for newline response and invalid requests.
 - Tests/run: `go test ./...` passes.
+- Completed T:12 PID + stale socket handling: added daemon startup helpers with injectable liveness/dialer checks plus unit tests; includes PID write/cleanup helpers.
+- Tests/run: `go test ./...` passes.

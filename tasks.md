@@ -193,10 +193,10 @@ Write the daemon PID on startup and remove PID + socket on clean shutdown.
 
 **Acceptance criteria:**
 
-- [ ] Given a stale PID file for a non-existent process, when the daemon starts, then it removes the stale PID + socket and successfully binds the socket
-- [ ] Error: given an active daemon PID is recorded, when a second daemon starts, then it exits non-zero with `err daemon_already_running <message>`
-- [ ] Given no PID file but an existing stale socket file, when the daemon starts, then it removes the socket and successfully binds
-- [ ] Tests: PID liveness logic is unit tested via an injectable liveness check and `go test ./...` passes
+- [x] Given a stale PID file for a non-existent process, when the daemon starts, then it removes the stale PID + socket and successfully binds the socket
+- [x] Error: given an active daemon PID is recorded, when a second daemon starts, then it exits non-zero with `err daemon_already_running <message>`
+- [x] Given no PID file but an existing stale socket file, when the daemon starts, then it removes the socket and successfully binds
+- [x] Tests: PID liveness logic is unit tested via an injectable liveness check and `go test ./...` passes
 
 ### T:13: Implement graceful shutdown (stop command, signals, cleanup)
 
