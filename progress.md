@@ -33,3 +33,6 @@
 - Completed T:15 daemon command: added size/scale validation, headless wiring, and CLI tests that start a headless daemon on a temp socket/PID.
 - Tests/run: `go test ./...` passes.
 - Next: implement client transport (T:16) and `pxcli start` command (T:17).
+- Completed T:16 client transport: added `internal/client` with request/response handling, timeouts, and structured errors; added tests for ok response, missing socket, and timeout behavior.
+- Tests/run: `go test ./...` passes.
+- Next: implement `pxcli start` (T:17) and CLI command wiring.

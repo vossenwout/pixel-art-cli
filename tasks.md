@@ -244,10 +244,10 @@ Use reasonable deadlines (connect + read/write) so CLI commands do not hang inde
 
 **Acceptance criteria:**
 
-- [ ] Given a test server that replies `ok`, when the client sends `clear`, then it returns success and exposes the response payload (if any)
-- [ ] Error: given the socket path does not exist, when the client sends a command, then it returns an error that the CLI prints as `err daemon_not_running <message>` and exits non-zero
-- [ ] Error: given a server accepts a connection but never replies, when the client sends a command, then it returns a timeout error (within a bounded duration)
-- [ ] Tests: client transport has unit tests using a temp socket and `go test ./...` passes
+- [x] Given a test server that replies `ok`, when the client sends `clear`, then it returns success and exposes the response payload (if any)
+- [x] Error: given the socket path does not exist, when the client sends a command, then it returns an error that the CLI prints as `err daemon_not_running <message>` and exits non-zero
+- [x] Error: given a server accepts a connection but never replies, when the client sends a command, then it returns a timeout error (within a bounded duration)
+- [x] Tests: client transport has unit tests using a temp socket and `go test ./...` passes
 
 ### T:17: Implement `pxcli start` (spawn daemon in background)
 
