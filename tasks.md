@@ -180,9 +180,9 @@ The server must process connections sequentially (one at a time) and block addit
 
 **Acceptance criteria:**
 
-- [ ] Given the daemon is listening, when a client connects, sends one newline-terminated request, and reads, then it receives exactly one newline-terminated response line
-- [ ] Error: given a client connects and sends an invalid request, when handled, then the server responds with `err <code> <message>` and closes the connection
-- [ ] Tests: socket server has integration tests using a temp socket path and `go test ./...` passes
+- [x] Given the daemon is listening, when a client connects, sends one newline-terminated request, and reads, then it receives exactly one newline-terminated response line
+- [x] Error: given a client connects and sends an invalid request, when handled, then the server responds with `err <code> <message>` and closes the connection
+- [x] Tests: socket server has integration tests using a temp socket path and `go test ./...` passes
 
 ### T:12: Implement PID file + stale socket handling
 

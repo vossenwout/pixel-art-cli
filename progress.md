@@ -22,3 +22,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:10 command handler: added daemon handler mapping protocol requests to canvas operations, error mapping, and stop callback support with unit tests.
 - Tests/run: `go test ./...` passes.
+- Completed T:11 socket server: added Unix domain socket server handling one request per connection plus integration tests for newline response and invalid requests.
+- Tests/run: `go test ./...` passes.
