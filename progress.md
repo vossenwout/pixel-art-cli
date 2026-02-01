@@ -16,3 +16,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:7 line: added Canvas Line (Bresenham) with endpoint bounds validation and unit tests for horizontal/vertical/diagonal lines plus out_of_bounds errors.
 - Tests/run: `go test ./...` passes.
+- Completed T:8 undo/redo history: added canvas snapshot/restore support plus history manager with undo/redo/redo-clear behavior and unit tests for no_history errors.
+- Tests/run: `go test ./...` passes.

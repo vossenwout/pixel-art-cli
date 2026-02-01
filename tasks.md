@@ -140,9 +140,9 @@ Undo restores the previous canvas state; redo reapplies; any new mutating operat
 
 **Acceptance criteria:**
 
-- [ ] Given a canvas where a pixel was changed, when I run `undo`, then the canvas returns to the previous state
-- [ ] Error: given no history is available, when I run `undo` (or `redo`), then the daemon returns `err no_history <message>`
-- [ ] Tests: undo/redo stack behavior (including redo clearing) is unit tested and `go test ./...` passes
+- [x] Given a canvas where a pixel was changed, when I run `undo`, then the canvas returns to the previous state
+- [x] Error: given no history is available, when I run `undo` (or `redo`), then the daemon returns `err no_history <message>`
+- [x] Tests: undo/redo stack behavior (including redo clearing) is unit tested and `go test ./...` passes
 
 ### T:9: Implement PNG export from canvas state
 

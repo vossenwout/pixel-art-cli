@@ -25,6 +25,13 @@ type Canvas struct {
 	pixels []color.RGBA
 }
 
+// Snapshot captures a copy of the canvas pixels.
+type Snapshot struct {
+	width  int
+	height int
+	pixels []color.RGBA
+}
+
 // New creates a canvas with the provided dimensions.
 func New(width, height int) (*Canvas, error) {
 	if width <= 0 || height <= 0 {
@@ -68,6 +75,25 @@ func (c *Canvas) Clear(value color.RGBA) {
 	for i := range c.pixels {
 		c.pixels[i] = value
 	}
+}
+
+// Snapshot returns a copy of the current canvas state.
+func (c *Canvas) Snapshot() Snapshot {
+	pixels := make([]color.RGBA, len(c.pixels))
+	copy(pixels, c.pixels)
+	return Snapshot{width: c.width, height: c.height, pixels: pixels}
+}
+
+// Restore replaces the current canvas state with the snapshot.
+func (c *Canvas) Restore(snapshot Snapshot) error {
+	if snapshot.width != c.width || snapshot.height != c.height {
+		return Error{Code: "invalid_args", Message: "snapshot dimensions do not match canvas"}
+	}
+	if len(snapshot.pixels) != len(c.pixels) {
+		return Error{Code: "invalid_args", Message: "snapshot size does not match canvas"}
+	}
+	copy(c.pixels, snapshot.pixels)
+	return nil
 }
 
 // FillRect fills a rectangle with the provided color.
