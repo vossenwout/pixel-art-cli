@@ -18,3 +18,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:8 undo/redo history: added canvas snapshot/restore support plus history manager with undo/redo/redo-clear behavior and unit tests for no_history errors.
 - Tests/run: `go test ./...` passes.
+- Completed T:9 PNG export: added canvas ExportPNG with PNG encoding and unit tests for pixel fidelity + io errors.
+- Tests/run: `go test ./...` passes.

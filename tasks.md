@@ -152,9 +152,9 @@ The export command writes exactly the canvas dimensions (no scaling) and returns
 
 **Acceptance criteria:**
 
-- [ ] Given a 2x2 canvas with known colors, when I export to a temp file and decode the PNG, then the decoded pixels match the canvas exactly
-- [ ] Error: given a path that cannot be created/written, when I run export, then the daemon returns `err io <message>`
-- [ ] Tests: PNG export has unit tests that decode and verify output and `go test ./...` passes
+- [x] Given a 2x2 canvas with known colors, when I export to a temp file and decode the PNG, then the decoded pixels match the canvas exactly
+- [x] Error: given a path that cannot be created/written, when I run export, then the daemon returns `err io <message>`
+- [x] Tests: PNG export has unit tests that decode and verify output and `go test ./...` passes
 
 ### T:10: Implement daemon command handler (request -> canvas operations)
 

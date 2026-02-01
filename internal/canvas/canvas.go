@@ -2,7 +2,10 @@ package canvas
 
 import (
 	"fmt"
+	"image"
 	"image/color"
+	"image/png"
+	"os"
 )
 
 // Error represents a canvas error with a code and message.
@@ -152,6 +155,31 @@ func (c *Canvas) Line(x1, y1, x2, y2 int, value color.RGBA) error {
 			errVal += dx
 			y1 += sy
 		}
+	}
+	return nil
+}
+
+// ExportPNG writes the canvas to a PNG file at the provided path.
+func (c *Canvas) ExportPNG(path string) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return Error{Code: "io", Message: err.Error()}
+	}
+
+	img := image.NewRGBA(image.Rect(0, 0, c.width, c.height))
+	for y := 0; y < c.height; y++ {
+		row := y * c.width
+		for x := 0; x < c.width; x++ {
+			img.SetRGBA(x, y, c.pixels[row+x])
+		}
+	}
+
+	if err := png.Encode(file, img); err != nil {
+		_ = file.Close()
+		return Error{Code: "io", Message: err.Error()}
+	}
+	if err := file.Close(); err != nil {
+		return Error{Code: "io", Message: err.Error()}
 	}
 	return nil
 }
