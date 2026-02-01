@@ -91,10 +91,10 @@ Implement canonical formatting used by `get_pixel` responses as lowercase `#rrgg
 
 **Acceptance criteria:**
 
-- [ ] Given `#f00`, when it is parsed, then it becomes RGBA(255,0,0,255)
-- [ ] Error: given `#12` or `not-a-color`, when it is parsed, then the result is `err invalid_color <message>`
-- [ ] Output: given a fully transparent pixel, when it is formatted, then the string is `#00000000`
-- [ ] Tests: color parsing/formatting is unit tested and `go test ./...` passes
+- [x] Given `#f00`, when it is parsed, then it becomes RGBA(255,0,0,255)
+- [x] Error: given `#12` or `not-a-color`, when it is parsed, then the result is `err invalid_color <message>`
+- [x] Output: given a fully transparent pixel, when it is formatted, then the string is `#00000000`
+- [x] Tests: color parsing/formatting is unit tested and `go test ./...` passes
 
 ### T:5: Implement in-memory canvas model with bounds checking
 

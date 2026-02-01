@@ -6,3 +6,6 @@
 - Completed T:3 protocol parsing/formatting: added `internal/protocol` with ASCII-whitespace parsing, structured errors, response formatters, and unit tests.
 - Tests/run: `go test ./...` passes.
 - Next: implement color parsing/formatting (T:4) or canvas model (T:5).
+- Completed T:4 color parsing/formatting: added `internal/color` with hex/named parsing, canonical formatting, structured errors, and unit tests.
+- Tests/run: `go test ./...` passes.
+- Next: implement canvas model (T:5) or drawing operations (T:6/T:7).
