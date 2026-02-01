@@ -33,6 +33,10 @@ func NewRootCmd(version string) *cobra.Command {
 	cmd.AddCommand(NewStartCmd())
 	cmd.AddCommand(NewDaemonCmd())
 	cmd.AddCommand(NewStopCmd())
+	cmd.AddCommand(NewSetPixelCmd())
+	cmd.AddCommand(NewFillRectCmd())
+	cmd.AddCommand(NewLineCmd())
+	cmd.AddCommand(NewClearCmd())
 
 	return cmd
 }

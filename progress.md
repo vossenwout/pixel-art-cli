@@ -40,3 +40,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:18 stop command: added `pxcli stop` to send stop requests, wait for socket/PID cleanup, and integration tests for stop + missing daemon errors.
 - Tests/run: `go test ./...` passes.
+- Completed T:19 CLI drawing commands: added `set_pixel`, `fill_rect`, `line`, `clear` commands with arg validation, request wiring, and mocked-client unit tests (flags are non-interspersed to allow negative numeric args).
+- Tests/run: `go test ./...` passes.

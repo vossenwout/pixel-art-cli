@@ -288,9 +288,9 @@ Commands must print the daemon response line and exit non-zero on `err` response
 
 **Acceptance criteria:**
 
-- [ ] Given a running daemon, when I run `pxcli set_pixel 10 10 #ff0000`, then it prints `ok` and `pxcli get_pixel 10 10` returns `ok #ff0000ff`
-- [ ] Error: given a bad arg (e.g., `pxcli fill_rect 0 0 -1 2 red`), when I run it, then it exits non-zero and prints `err invalid_args <message>`
-- [ ] Tests: CLI arg validation and request formatting are unit tested (via a mocked client) and `go test ./...` passes
+- [x] Given a running daemon, when I run `pxcli set_pixel 10 10 #ff0000`, then it prints `ok` and `pxcli get_pixel 10 10` returns `ok #ff0000ff`
+- [x] Error: given a bad arg (e.g., `pxcli fill_rect 0 0 -1 2 red`), when I run it, then it exits non-zero and prints `err invalid_args <message>`
+- [x] Tests: CLI arg validation and request formatting are unit tested (via a mocked client) and `go test ./...` passes
 
 ### T:20: Implement CLI utility commands (get_pixel, export)
 
