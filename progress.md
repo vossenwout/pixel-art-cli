@@ -3,3 +3,6 @@
 - Completed T:2 defaults/config: added `internal/config` with shared defaults/options, root `--socket` validation, and stub `start`/`daemon` commands with `--headless` flag; added unit tests for defaults and validation.
 - Tests/run: `go test ./...` passes.
 - Next: implement IPC protocol parsing (T:3) and begin command/daemon plumbing.
+- Completed T:3 protocol parsing/formatting: added `internal/protocol` with ASCII-whitespace parsing, structured errors, response formatters, and unit tests.
+- Tests/run: `go test ./...` passes.
+- Next: implement color parsing/formatting (T:4) or canvas model (T:5).

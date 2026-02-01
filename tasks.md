@@ -78,10 +78,10 @@ Parsing must ignore leading/trailing whitespace and treat 1+ ASCII whitespace ch
 
 **Acceptance criteria:**
 
-- [ ] Given `set_pixel 10 10 #ff0000`, when it is parsed, then the command is `set_pixel` with args `["10","10","#ff0000"]`
-- [ ] Given `  get_pixel   1\t2  `, when it is parsed, then the command is `get_pixel` with args `["1","2"]`
-- [ ] Error: given an empty/whitespace-only request line, when it is parsed, then the daemon returns `err invalid_command <message>`
-- [ ] Tests: protocol parsing/formatting has unit tests and `go test ./...` passes
+- [x] Given `set_pixel 10 10 #ff0000`, when it is parsed, then the command is `set_pixel` with args `["10","10","#ff0000"]`
+- [x] Given `  get_pixel   1\t2  `, when it is parsed, then the command is `get_pixel` with args `["1","2"]`
+- [x] Error: given an empty/whitespace-only request line, when it is parsed, then the daemon returns `err invalid_command <message>`
+- [x] Tests: protocol parsing/formatting has unit tests and `go test ./...` passes
 
 ### T:4: Implement color parsing and canonical formatting
 
