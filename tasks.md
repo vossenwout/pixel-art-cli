@@ -104,9 +104,9 @@ Provide methods for `SetPixel(x,y,color)`, `GetPixel(x,y)`, and `Clear(color)` w
 
 **Acceptance criteria:**
 
-- [ ] Given a 4x4 canvas, when I set pixel (1,2) to red and then get (1,2), then the returned color is red
-- [ ] Error: given x=-1 or x>=width (or similarly for y), when I call `GetPixel`/`SetPixel`, then it returns an `out_of_bounds` error
-- [ ] Tests: canvas get/set/clear and bounds behavior are unit tested and `go test ./...` passes
+- [x] Given a 4x4 canvas, when I set pixel (1,2) to red and then get (1,2), then the returned color is red
+- [x] Error: given x=-1 or x>=width (or similarly for y), when I call `GetPixel`/`SetPixel`, then it returns an `out_of_bounds` error
+- [x] Tests: canvas get/set/clear and bounds behavior are unit tested and `go test ./...` passes
 
 ### T:6: Implement `fill_rect` drawing operation
 
