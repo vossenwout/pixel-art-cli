@@ -32,6 +32,7 @@ func NewRootCmd(version string) *cobra.Command {
 
 	cmd.AddCommand(NewStartCmd())
 	cmd.AddCommand(NewDaemonCmd())
+	cmd.AddCommand(NewStopCmd())
 
 	return cmd
 }

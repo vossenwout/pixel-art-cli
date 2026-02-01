@@ -276,9 +276,9 @@ If the daemon is not reachable, return a clear non-zero error.
 
 **Acceptance criteria:**
 
-- [ ] Given a daemon is running, when I run `pxcli stop`, then it prints `ok` and the socket/PID files are removed
-- [ ] Error: given no daemon is running, when I run `pxcli stop`, then it exits non-zero and prints `err daemon_not_running <message>`
-- [ ] Tests: stop behavior is exercised via integration tests (headless, no GUI) and `go test ./...` passes
+- [x] Given a daemon is running, when I run `pxcli stop`, then it prints `ok` and the socket/PID files are removed
+- [x] Error: given no daemon is running, when I run `pxcli stop`, then it exits non-zero and prints `err daemon_not_running <message>`
+- [x] Tests: stop behavior is exercised via integration tests (headless, no GUI) and `go test ./...` passes
 
 ### T:19: Implement CLI drawing commands (set_pixel, fill_rect, line, clear)
 

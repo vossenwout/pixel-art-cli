@@ -38,3 +38,5 @@
 - Next: implement `pxcli start` (T:17) and CLI command wiring.
 - Completed T:17 start command: spawn daemon with validated size/scale/headless flags, wait for socket readiness, print PID, and handle daemon-already-running errors; added unit/integration coverage for start behavior/argv construction.
 - Tests/run: `go test ./...` passes.
+- Completed T:18 stop command: added `pxcli stop` to send stop requests, wait for socket/PID cleanup, and integration tests for stop + missing daemon errors.
+- Tests/run: `go test ./...` passes.
