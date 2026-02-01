@@ -206,9 +206,9 @@ Ensure shutdown completes even if no clients are connected.
 
 **Acceptance criteria:**
 
-- [ ] Given the daemon is running, when it receives a `stop` request, then it responds `ok`, exits, and removes `/tmp/pxcli.sock` and `/tmp/pxcli.pid`
-- [ ] Given the daemon is running, when it receives SIGINT, then it exits and removes `/tmp/pxcli.sock` and `/tmp/pxcli.pid`
-- [ ] Tests: shutdown coordination (headless, no GUI) is covered by tests and `go test ./...` passes
+- [x] Given the daemon is running, when it receives a `stop` request, then it responds `ok`, exits, and removes `/tmp/pxcli.sock` and `/tmp/pxcli.pid`
+- [x] Given the daemon is running, when it receives SIGINT, then it exits and removes `/tmp/pxcli.sock` and `/tmp/pxcli.pid`
+- [x] Tests: shutdown coordination (headless, no GUI) is covered by tests and `go test ./...` passes
 
 ### T:14: Implement headless daemon runtime (no GUI)
 

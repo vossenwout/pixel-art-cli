@@ -26,3 +26,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:12 PID + stale socket handling: added daemon startup helpers with injectable liveness/dialer checks plus unit tests; includes PID write/cleanup helpers.
 - Tests/run: `go test ./...` passes.
+- Completed T:13 graceful shutdown: added daemon runtime with stop/signal handling, cleanup of PID/socket, and tests for stop request + SIGINT shutdown.
+- Tests/run: `go test ./...` passes.
