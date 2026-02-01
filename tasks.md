@@ -262,6 +262,11 @@ Print the daemon PID and exit; poll until the socket is accepting connections (o
 - [ ] Error: given a daemon is already running, when I run `pxcli start`, then it exits non-zero and prints `err daemon_already_running <message>`
 - [ ] Output: given `pxcli start --size 8x8 --headless`, when it succeeds, then subsequent client commands operate on an 8x8 canvas
 - [ ] Tests: start command argument validation and daemon argv construction are unit tested and `go test ./...` passes
+ - [x] Given no daemon is running, when I run `pxcli start`, then it exits zero, prints the daemon PID, and the daemon is ready to accept requests (headless)
+ - [x] Error: given `--scale 0` (or `--scale -1`), when I run `pxcli start`, then it exits non-zero and prints a helpful validation error
+ - [x] Error: given a daemon is already running, when I run `pxcli start`, then it exits non-zero and prints `err daemon_already_running <message>`
+ - [x] Output: given `pxcli start --size 8x8 --headless`, when it succeeds, then subsequent client commands operate on an 8x8 canvas
+ - [x] Tests: start command argument validation and daemon argv construction are unit tested and `go test ./...` passes
 
 ### T:18: Implement `pxcli stop` (request shutdown and wait)
 
