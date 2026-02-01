@@ -1,0 +1,3 @@
+- Completed T:1 scaffold: Go module, Cobra root command with --version, and unit tests for unknown command/usage and version.
+- Tests/run: `go test ./...` and `go build ./cmd/pxcli` pass.
+- Next: start T:2 defaults/config flags (socket/headless) and expand CLI/daemon structure.

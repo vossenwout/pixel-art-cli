@@ -50,9 +50,9 @@ Wire `--help` output, version plumbing (at least a `--version` flag), and ensure
 
 **Acceptance criteria:**
 
-- [ ] Given a clean checkout, when I run `go build ./cmd/pxcli`, then the build succeeds and produces a runnable `pxcli` binary
-- [ ] Given an unknown command, when I run `pxcli does-not-exist`, then the CLI exits non-zero and prints command usage/help
-- [ ] Tests: when I run `go test ./...`, then it exits zero
+- [x] Given a clean checkout, when I run `go build ./cmd/pxcli`, then the build succeeds and produces a runnable `pxcli` binary
+- [x] Given an unknown command, when I run `pxcli does-not-exist`, then the CLI exits non-zero and prints command usage/help
+- [x] Tests: when I run `go test ./...`, then it exits zero
 
 ### T:2: Define shared defaults and path configuration
 
