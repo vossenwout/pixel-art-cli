@@ -326,10 +326,10 @@ Cover at least: set_pixel/get_pixel, fill_rect, line, clear, export (to temp dir
 
 **Acceptance criteria:**
 
-- [ ] Given the test harness, when it sends the documented command set over the socket, then responses match the `ok`/`err` protocol and state changes are correct
-- [ ] Error: given an out-of-bounds coordinate, when the test sends `set_pixel -1 0 red`, then it receives `err out_of_bounds <message>`
-- [ ] Tests: these tests use temp socket/PID paths and never read/write `/tmp/pxcli.sock` or `/tmp/pxcli.pid`
-- [ ] Tests: `go test ./...` runs these integration tests and exits zero
+- [x] Given the test harness, when it sends the documented command set over the socket, then responses match the `ok`/`err` protocol and state changes are correct
+- [x] Error: given an out-of-bounds coordinate, when the test sends `set_pixel -1 0 red`, then it receives `err out_of_bounds <message>`
+- [x] Tests: these tests use temp socket/PID paths and never read/write `/tmp/pxcli.sock` or `/tmp/pxcli.pid`
+- [x] Tests: `go test ./...` runs these integration tests and exits zero
 
 ### T:23: Document usage and protocol expectations
 

@@ -46,3 +46,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:21 CLI history commands: added `undo`/`redo` commands, request wiring tests, and integration coverage for undo/redo behavior.
 - Tests/run: `go test ./...` passes.
+- Completed T:22 end-to-end protocol integration tests: added headless socket harness covering drawing, export, undo/redo, and out_of_bounds errors with temp socket/PID paths.
+- Tests/run: `go test ./...` passes.
