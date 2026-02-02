@@ -52,3 +52,5 @@
 - Tests/run: `go test -race ./...` and `go test ./...` pass.
 - Completed T:23 documentation: added README with headless workflow, protocol summary, socket overrides, troubleshooting, and export path notes; added a docs test to ensure core workflow coverage.
 - Tests/run: `go test ./...` passes.
+- Verified T:17 acceptance criteria: added start command test for negative scale validation and aligned tasks checklist.
+- Tests/run: `go test ./...` passes.

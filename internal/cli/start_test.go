@@ -30,17 +30,20 @@ func TestBuildDaemonArgs(t *testing.T) {
 }
 
 func TestStartCmd_InvalidScale(t *testing.T) {
-	cmd := NewRootCmd("dev")
-	cmd.SetOut(io.Discard)
-	cmd.SetErr(io.Discard)
-	cmd.SetArgs([]string{"start", "--scale", "0"})
+	cases := []string{"0", "-1"}
+	for _, scale := range cases {
+		cmd := NewRootCmd("dev")
+		cmd.SetOut(io.Discard)
+		cmd.SetErr(io.Discard)
+		cmd.SetArgs([]string{"start", "--scale", scale})
 
-	err := cmd.Execute()
-	if err == nil {
-		t.Fatalf("expected error for invalid scale")
-	}
-	if !strings.Contains(err.Error(), "invalid scale") {
-		t.Fatalf("expected scale validation error, got %q", err.Error())
+		err := cmd.Execute()
+		if err == nil {
+			t.Fatalf("expected error for invalid scale %s", scale)
+		}
+		if !strings.Contains(err.Error(), "invalid scale") {
+			t.Fatalf("expected scale validation error for %s, got %q", scale, err.Error())
+		}
 	}
 }
 
