@@ -341,9 +341,9 @@ Document how `pxcli export <path>` is resolved (relative paths are interpreted f
 
 **Acceptance criteria:**
 
-- [ ] Given the repository README/docs, when a user follows the steps, then they can start the daemon in headless mode, draw a pixel, query it, export a PNG, and stop the daemon
-- [ ] Given a stale PID/socket scenario, when the user follows the troubleshooting steps, then they can recover without manual file deletion
-- [ ] Tests: documentation changes do not break the build and `go test ./...` passes
+- [x] Given the repository README/docs, when a user follows the steps, then they can start the daemon in headless mode, draw a pixel, query it, export a PNG, and stop the daemon
+- [x] Given a stale PID/socket scenario, when the user follows the troubleshooting steps, then they can recover without manual file deletion
+- [x] Tests: documentation changes do not break the build and `go test ./...` passes
 
 ### T:24: Ensure daemon concurrency is race-free
 

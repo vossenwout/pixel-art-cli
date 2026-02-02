@@ -50,3 +50,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:24 race-free daemon concurrency: added locking to canvas/history and a concurrent-request headless runtime test.
 - Tests/run: `go test -race ./...` and `go test ./...` pass.
+- Completed T:23 documentation: added README with headless workflow, protocol summary, socket overrides, troubleshooting, and export path notes; added a docs test to ensure core workflow coverage.
+- Tests/run: `go test ./...` passes.
