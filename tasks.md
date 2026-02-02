@@ -314,9 +314,9 @@ Ensure exit codes match daemon success/error.
 
 **Acceptance criteria:**
 
-- [ ] Given at least one prior mutating command, when I run `pxcli undo`, then it prints `ok` and a subsequent `pxcli get_pixel` reflects the previous state
-- [ ] Error: given no redo is available, when I run `pxcli redo`, then it exits non-zero and prints `err no_history <message>`
-- [ ] Tests: CLI undo/redo request wiring is unit tested and `go test ./...` passes
+- [x] Given at least one prior mutating command, when I run `pxcli undo`, then it prints `ok` and a subsequent `pxcli get_pixel` reflects the previous state
+- [x] Error: given no redo is available, when I run `pxcli redo`, then it exits non-zero and prints `err no_history <message>`
+- [x] Tests: CLI undo/redo request wiring is unit tested and `go test ./...` passes
 
 ### T:22: Add end-to-end protocol integration tests (daemon core without UI)
 

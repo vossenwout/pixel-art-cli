@@ -44,3 +44,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:20 CLI utility commands: added `get_pixel`/`export`, absolute path resolution for export, and tests covering get_pixel output plus export path/error handling.
 - Tests/run: `go test ./...` passes.
+- Completed T:21 CLI history commands: added `undo`/`redo` commands, request wiring tests, and integration coverage for undo/redo behavior.
+- Tests/run: `go test ./...` passes.
