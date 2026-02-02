@@ -6,6 +6,7 @@ import (
 	"image/color"
 	"image/png"
 	"os"
+	"sync"
 )
 
 // Error represents a canvas error with a code and message.
@@ -23,6 +24,7 @@ func (e Error) Error() string {
 
 // Canvas stores pixel data for a fixed-width, fixed-height image.
 type Canvas struct {
+	mu     sync.RWMutex
 	width  int
 	height int
 	pixels []color.RGBA
@@ -46,16 +48,22 @@ func New(width, height int) (*Canvas, error) {
 
 // Width returns the canvas width in pixels.
 func (c *Canvas) Width() int {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	return c.width
 }
 
 // Height returns the canvas height in pixels.
 func (c *Canvas) Height() int {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	return c.height
 }
 
 // SetPixel sets a pixel to the provided color.
 func (c *Canvas) SetPixel(x, y int, value color.RGBA) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	idx, err := c.index(x, y)
 	if err != nil {
 		return err
@@ -66,6 +74,8 @@ func (c *Canvas) SetPixel(x, y int, value color.RGBA) error {
 
 // GetPixel returns the color at the provided coordinates.
 func (c *Canvas) GetPixel(x, y int) (color.RGBA, error) {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	idx, err := c.index(x, y)
 	if err != nil {
 		return color.RGBA{}, err
@@ -75,6 +85,8 @@ func (c *Canvas) GetPixel(x, y int) (color.RGBA, error) {
 
 // Clear fills the entire canvas with the provided color.
 func (c *Canvas) Clear(value color.RGBA) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	for i := range c.pixels {
 		c.pixels[i] = value
 	}
@@ -82,6 +94,8 @@ func (c *Canvas) Clear(value color.RGBA) {
 
 // Snapshot returns a copy of the current canvas state.
 func (c *Canvas) Snapshot() Snapshot {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
 	pixels := make([]color.RGBA, len(c.pixels))
 	copy(pixels, c.pixels)
 	return Snapshot{width: c.width, height: c.height, pixels: pixels}
@@ -89,6 +103,8 @@ func (c *Canvas) Snapshot() Snapshot {
 
 // Restore replaces the current canvas state with the snapshot.
 func (c *Canvas) Restore(snapshot Snapshot) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	if snapshot.width != c.width || snapshot.height != c.height {
 		return Error{Code: "invalid_args", Message: "snapshot dimensions do not match canvas"}
 	}
@@ -101,6 +117,8 @@ func (c *Canvas) Restore(snapshot Snapshot) error {
 
 // FillRect fills a rectangle with the provided color.
 func (c *Canvas) FillRect(x, y, w, h int, value color.RGBA) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	if w <= 0 || h <= 0 {
 		return Error{Code: "invalid_args", Message: "rect width and height must be positive"}
 	}
@@ -122,6 +140,8 @@ func (c *Canvas) FillRect(x, y, w, h int, value color.RGBA) error {
 
 // Line draws a line between two points, inclusive of endpoints.
 func (c *Canvas) Line(x1, y1, x2, y2 int, value color.RGBA) error {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	if _, err := c.index(x1, y1); err != nil {
 		return err
 	}
@@ -166,11 +186,12 @@ func (c *Canvas) ExportPNG(path string) error {
 		return Error{Code: "io", Message: err.Error()}
 	}
 
-	img := image.NewRGBA(image.Rect(0, 0, c.width, c.height))
-	for y := 0; y < c.height; y++ {
-		row := y * c.width
-		for x := 0; x < c.width; x++ {
-			img.SetRGBA(x, y, c.pixels[row+x])
+	snapshot := c.Snapshot()
+	img := image.NewRGBA(image.Rect(0, 0, snapshot.width, snapshot.height))
+	for y := 0; y < snapshot.height; y++ {
+		row := y * snapshot.width
+		for x := 0; x < snapshot.width; x++ {
+			img.SetRGBA(x, y, snapshot.pixels[row+x])
 		}
 	}
 

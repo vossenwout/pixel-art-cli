@@ -353,9 +353,9 @@ Add/adjust tests and synchronization so the project passes the Go race detector.
 
 **Acceptance criteria:**
 
-- [ ] Given the full test suite, when I run `go test -race ./...`, then it exits zero and reports no data races
-- [ ] Given a running daemon, when I rapidly issue drawing commands while the daemon is processing requests, then it does not crash or deadlock
-- [ ] Tests: `go test ./...` still passes
+- [x] Given the full test suite, when I run `go test -race ./...`, then it exits zero and reports no data races
+- [x] Given a running daemon, when I rapidly issue drawing commands while the daemon is processing requests, then it does not crash or deadlock
+- [x] Tests: `go test ./...` still passes
 
 ## Future (GUI) work (not in scope for headless development)
 

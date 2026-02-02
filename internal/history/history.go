@@ -1,6 +1,10 @@
 package history
 
-import "pxcli/internal/canvas"
+import (
+	"sync"
+
+	"pxcli/internal/canvas"
+)
 
 // Error represents an undo/redo history error with a code and message.
 type Error struct {
@@ -17,6 +21,7 @@ func (e Error) Error() string {
 
 // Manager tracks undo/redo history for a canvas.
 type Manager struct {
+	mu     sync.Mutex
 	canvas *canvas.Canvas
 	undo   []canvas.Snapshot
 	redo   []canvas.Snapshot
@@ -34,6 +39,8 @@ func (m *Manager) Canvas() *canvas.Canvas {
 
 // Apply runs a mutating operation and records undo history on success.
 func (m *Manager) Apply(mutate func(*canvas.Canvas) error) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	snapshot := m.canvas.Snapshot()
 	if err := mutate(m.canvas); err != nil {
 		return err
@@ -45,6 +52,8 @@ func (m *Manager) Apply(mutate func(*canvas.Canvas) error) error {
 
 // Undo restores the previous snapshot, if available.
 func (m *Manager) Undo() error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	if len(m.undo) == 0 {
 		return Error{Code: "no_history", Message: "nothing to undo"}
 	}
@@ -60,6 +69,8 @@ func (m *Manager) Undo() error {
 
 // Redo reapplies a previously undone snapshot, if available.
 func (m *Manager) Redo() error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	if len(m.redo) == 0 {
 		return Error{Code: "no_history", Message: "nothing to redo"}
 	}

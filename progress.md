@@ -48,3 +48,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:22 end-to-end protocol integration tests: added headless socket harness covering drawing, export, undo/redo, and out_of_bounds errors with temp socket/PID paths.
 - Tests/run: `go test ./...` passes.
+- Completed T:24 race-free daemon concurrency: added locking to canvas/history and a concurrent-request headless runtime test.
+- Tests/run: `go test -race ./...` and `go test ./...` pass.
