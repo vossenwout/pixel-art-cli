@@ -301,10 +301,10 @@ For predictable behavior with a background daemon, the CLI must resolve `export`
 
 **Acceptance criteria:**
 
-- [ ] Given a running daemon with a known pixel, when I run `pxcli get_pixel 0 0`, then it prints `ok #rrggbbaa` with the correct color
-- [ ] Given I run `pxcli export out.png` from a directory, when it succeeds, then `out.png` is created in that directory (even though the daemon is a separate process)
-- [ ] Error: given an unwritable filename path, when I run `pxcli export /root/out.png`, then it exits non-zero and prints `err io <message>`
-- [ ] Tests: CLI behaviors for get_pixel/export are covered and `go test ./...` passes
+- [x] Given a running daemon with a known pixel, when I run `pxcli get_pixel 0 0`, then it prints `ok #rrggbbaa` with the correct color
+- [x] Given I run `pxcli export out.png` from a directory, when it succeeds, then `out.png` is created in that directory (even though the daemon is a separate process)
+- [x] Error: given an unwritable filename path, when I run `pxcli export /root/out.png`, then it exits non-zero and prints `err io <message>`
+- [x] Tests: CLI behaviors for get_pixel/export are covered and `go test ./...` passes
 
 ### T:21: Implement CLI history commands (undo, redo)
 

@@ -42,3 +42,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:19 CLI drawing commands: added `set_pixel`, `fill_rect`, `line`, `clear` commands with arg validation, request wiring, and mocked-client unit tests (flags are non-interspersed to allow negative numeric args).
 - Tests/run: `go test ./...` passes.
+- Completed T:20 CLI utility commands: added `get_pixel`/`export`, absolute path resolution for export, and tests covering get_pixel output plus export path/error handling.
+- Tests/run: `go test ./...` passes.
