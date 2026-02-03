@@ -65,3 +65,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:28 window/daemon lifecycle coordination: factored shared windowed runtime wiring, ensured stop requests trigger renderer close, and added tests for stop/close cleanup with a fake renderer.
 - Tests/run: `go test ./...` passes.
+- Finalized T:27 Ebiten renderer verification: fixed nearest-neighbor scaling to use DrawImageOptions filter, confirmed `go build -tags=ebiten ./cmd/pxcli` in container, and exercised windowed daemon under Xvfb (stop returned ok).
+- Tests/run: `go test ./...` passes; `go test -tags=ebiten ./internal/daemon` passes with Xvfb.

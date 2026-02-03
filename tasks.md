@@ -402,9 +402,9 @@ In the render loop, if the dirty flag is set, call the rendering snapshot API an
 
 **Acceptance criteria:**
 
-- [ ] Given a local build with `-tags=ebiten`, when the daemon starts in windowed mode, then an Ebiten window opens and shows the canvas
-- [ ] Given `--scale 10` on an 8x8 canvas, when windowed mode runs, then the window content renders an 80x80 pixel area with crisp blocks
-- [ ] Tests: `go build -tags=ebiten ./cmd/pxcli` succeeds locally
+- [x] Given a local build with `-tags=ebiten`, when the daemon starts in windowed mode, then an Ebiten window opens and shows the canvas
+- [x] Given `--scale 10` on an 8x8 canvas, when windowed mode runs, then the window content renders an 80x80 pixel area with crisp blocks
+- [x] Tests: `go build -tags=ebiten ./cmd/pxcli` succeeds locally
 
 ### T:28: Coordinate window and daemon lifecycle
 

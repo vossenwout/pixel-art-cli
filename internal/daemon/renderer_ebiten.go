@@ -112,7 +112,6 @@ func (g *renderGame) Update() error {
 		snapshot := g.source.RenderSnapshot()
 		if g.img == nil {
 			g.img = ebiten.NewImage(snapshot.Width, snapshot.Height)
-			g.img.SetFilter(ebiten.FilterNearest)
 			g.width = snapshot.Width
 			g.height = snapshot.Height
 		}
@@ -127,6 +126,7 @@ func (g *renderGame) Draw(screen *ebiten.Image) {
 	}
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Scale(float64(g.scale), float64(g.scale))
+	op.Filter = ebiten.FilterNearest
 	screen.DrawImage(g.img, op)
 }
 
