@@ -61,3 +61,5 @@
 - Implemented T:27 windowed renderer: added Ebiten renderer + windowed runtime wiring, headless/renderer selection in daemon command, and a scale calculation test.
 - Tests/run: `go test ./...` passes.
 - Note: `go build -tags=ebiten ./cmd/pxcli` fails in the container (missing GL/X11 dev libs via pkg-config); verify windowed build locally.
+- Completed T:29 windowed docs: updated README with `-tags=ebiten` build/run steps and local-only GUI verification notes; extended docs test coverage.
+- Tests/run: `go test ./...` passes.

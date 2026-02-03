@@ -429,5 +429,5 @@ Include local verification steps for opening the window.
 
 **Acceptance criteria:**
 
-- [ ] Docs show how to build with `-tags=ebiten` and run `pxcli start --headless=false --scale <n>` locally
-- [ ] Docs state that headless container development is required and GUI verification must be done locally
+- [x] Docs show how to build with `-tags=ebiten` and run `pxcli start --headless=false --scale <n>` locally
+- [x] Docs state that headless container development is required and GUI verification must be done locally

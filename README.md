@@ -124,15 +124,20 @@ Manual deletion should not be necessary for normal recovery.
 
 ## Headless-first development
 
-Headless mode is the default for development and CI. Windowed GUI support (Ebiten) is the next milestone
-and will be enabled via a build tag without changing the protocol.
+Headless mode is the default for development and CI. Windowed GUI support (Ebiten) is available only
+when you build with the `ebiten` tag, and it should be verified locally (not inside the headless container).
 
-## Windowed GUI (Ebiten, planned)
+## Windowed GUI (Ebiten)
 
-Windowed mode will be enabled via the `ebiten` build tag to avoid GUI dependencies in CI/EC2.
-Expected local usage once implemented:
+Windowed mode uses the `ebiten` build tag to avoid GUI dependencies in CI/EC2.
+Local usage:
 
 ```bash
 go build -tags=ebiten ./cmd/pxcli
 ./pxcli start --headless=false --scale 10
 ```
+
+Notes:
+
+- The headless container/CI environment cannot open a window; build and run windowed mode locally.
+- `--scale` controls the pixel-perfect window size (canvas size × scale).

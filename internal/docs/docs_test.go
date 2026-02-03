@@ -24,6 +24,8 @@ func TestReadmeCoversCoreWorkflow(t *testing.T) {
 		"undo",
 		"redo",
 		"headless",
+		"-tags=ebiten",
+		"headless container",
 		"--socket",
 		"stale pid/socket",
 		"absolute path",
