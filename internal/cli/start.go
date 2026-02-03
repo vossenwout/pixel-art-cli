@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 	"net"
 	"os"
@@ -55,11 +54,11 @@ func NewStartCmd() *cobra.Command {
 			if scale <= 0 {
 				return fmt.Errorf("invalid scale %d: must be > 0", scale)
 			}
-			if !headless {
-				return errors.New("windowed mode is not implemented yet")
+			if err := daemon.ValidateRenderer(headless); err != nil {
+				return formatDaemonError(err)
 			}
 			if err := startEnsureReady(daemonPIDPath, socketPath); err != nil {
-				return formatStartError(err)
+				return formatDaemonError(err)
 			}
 
 			daemonArgs := buildDaemonArgs(socketPath, fmt.Sprintf("%dx%d", width, height), scale, headless)
@@ -141,18 +140,4 @@ func waitForSocketReady(socketPath string, timeout time.Duration) error {
 		}
 		time.Sleep(startPollInterval)
 	}
-}
-
-func formatStartError(err error) error {
-	if err == nil {
-		return nil
-	}
-	var daemonErr daemon.Error
-	if errors.As(err, &daemonErr) {
-		if strings.TrimSpace(daemonErr.Message) == "" {
-			return fmt.Errorf("err %s", daemonErr.Code)
-		}
-		return fmt.Errorf("err %s %s", daemonErr.Code, daemonErr.Message)
-	}
-	return err
 }

@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -37,8 +36,8 @@ func NewDaemonCmd() *cobra.Command {
 			if scale <= 0 {
 				return fmt.Errorf("invalid scale %d: must be > 0", scale)
 			}
-			if !headless {
-				return errors.New("windowed mode is not implemented yet")
+			if err := daemon.ValidateRenderer(headless); err != nil {
+				return formatDaemonError(err)
 			}
 
 			cfg := config.New(

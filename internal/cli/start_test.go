@@ -48,6 +48,21 @@ func TestStartCmd_InvalidScale(t *testing.T) {
 	}
 }
 
+func TestStartCmd_WindowedUnsupported(t *testing.T) {
+	cmd := NewRootCmd("dev")
+	cmd.SetOut(io.Discard)
+	cmd.SetErr(io.Discard)
+	cmd.SetArgs([]string{"start", "--headless=false"})
+
+	err := cmd.Execute()
+	if err == nil {
+		t.Fatalf("expected renderer_unavailable error")
+	}
+	if !strings.Contains(err.Error(), "err renderer_unavailable") {
+		t.Fatalf("expected renderer_unavailable error, got %q", err.Error())
+	}
+}
+
 func TestStartCmd_StartsDaemonAndDetectsRunning(t *testing.T) {
 	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")

@@ -372,9 +372,9 @@ If `--headless=false` is requested without GUI support, return a clear error and
 
 **Acceptance criteria:**
 
-- [ ] Given a build without the `ebiten` tag, when `pxcli daemon --headless=false` or `pxcli start --headless=false` runs, then it exits non-zero with `err renderer_unavailable <message>` (or equivalent)
-- [ ] Given `--headless=true`, when the daemon starts, then no renderer is initialized and headless behavior is unchanged
-- [ ] Tests: `go test ./...` and `go build ./cmd/pxcli` pass in the headless container without GUI deps
+- [x] Given a build without the `ebiten` tag, when `pxcli daemon --headless=false` or `pxcli start --headless=false` runs, then it exits non-zero with `err renderer_unavailable <message>` (or equivalent)
+- [x] Given `--headless=true`, when the daemon starts, then no renderer is initialized and headless behavior is unchanged
+- [x] Tests: `go test ./...` and `go build ./cmd/pxcli` pass in the headless container without GUI deps
 
 ### T:26: Add canvas snapshot/dirty tracking for rendering
 

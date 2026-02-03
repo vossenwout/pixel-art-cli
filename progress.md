@@ -54,3 +54,5 @@
 - Tests/run: `go test ./...` passes.
 - Verified T:17 acceptance criteria: added start command test for negative scale validation and aligned tasks checklist.
 - Tests/run: `go test ./...` passes.
+- Completed T:25 renderer abstraction: added Renderer interface + stub for non-ebiten builds, renderer availability checks, and CLI errors for `--headless=false` with tests for start/daemon.
+- Tests/run: `go test ./...` and `go build ./cmd/pxcli` pass.

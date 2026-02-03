@@ -151,6 +151,21 @@ func TestDaemonCmd_InvalidScale(t *testing.T) {
 	}
 }
 
+func TestDaemonCmd_WindowedUnsupported(t *testing.T) {
+	cmd := NewRootCmd("dev")
+	cmd.SetOut(io.Discard)
+	cmd.SetErr(io.Discard)
+	cmd.SetArgs([]string{"daemon", "--headless=false"})
+
+	err := cmd.Execute()
+	if err == nil {
+		t.Fatalf("expected renderer_unavailable error")
+	}
+	if !strings.Contains(err.Error(), "err renderer_unavailable") {
+		t.Fatalf("expected renderer_unavailable error, got %q", err.Error())
+	}
+}
+
 func waitForPath(t *testing.T, path string) {
 	t.Helper()
 	deadline := time.After(2 * time.Second)
