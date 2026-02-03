@@ -63,3 +63,5 @@
 - Note: `go build -tags=ebiten ./cmd/pxcli` fails in the container (missing GL/X11 dev libs via pkg-config); verify windowed build locally.
 - Completed T:29 windowed docs: updated README with `-tags=ebiten` build/run steps and local-only GUI verification notes; extended docs test coverage.
 - Tests/run: `go test ./...` passes.
+- Completed T:28 window/daemon lifecycle coordination: factored shared windowed runtime wiring, ensured stop requests trigger renderer close, and added tests for stop/close cleanup with a fake renderer.
+- Tests/run: `go test ./...` passes.

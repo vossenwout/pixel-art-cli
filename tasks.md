@@ -417,9 +417,9 @@ All shutdown paths must remove PID/socket files and follow the same cleanup path
 
 **Acceptance criteria:**
 
-- [ ] Given the window is open, when `pxcli stop` is sent, then the window closes and the daemon exits cleanly
-- [ ] Given the user closes the window, then the daemon exits and removes PID/socket files
-- [ ] Tests: headless shutdown tests still pass without GUI deps
+- [x] Given the window is open, when `pxcli stop` is sent, then the window closes and the daemon exits cleanly
+- [x] Given the user closes the window, then the daemon exits and removes PID/socket files
+- [x] Tests: headless shutdown tests still pass without GUI deps
 
 ### T:29: Document windowed mode usage and local verification
 
