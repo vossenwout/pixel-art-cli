@@ -48,7 +48,10 @@ func NewDaemonCmd() *cobra.Command {
 				config.WithHeadless(headless),
 			)
 
-			return daemon.RunHeadless(cfg, daemon.HeadlessOptions{})
+			if headless {
+				return daemon.RunHeadless(cfg, daemon.HeadlessOptions{})
+			}
+			return daemon.RunWindowed(cfg, daemon.WindowedOptions{})
 		},
 	}
 

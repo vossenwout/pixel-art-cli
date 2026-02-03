@@ -1,6 +1,10 @@
 package daemon
 
-import "context"
+import (
+	"context"
+
+	"pxcli/internal/canvas"
+)
 
 const rendererUnavailableMessage = "windowed mode requires -tags=ebiten"
 
@@ -8,6 +12,14 @@ const rendererUnavailableMessage = "windowed mode requires -tags=ebiten"
 type Renderer interface {
 	Run(ctx context.Context) error
 	RequestClose()
+}
+
+// RenderSource provides snapshot and dirty information for rendering.
+type RenderSource interface {
+	Dirty() bool
+	RenderSnapshot() canvas.RenderSnapshot
+	Width() int
+	Height() int
 }
 
 // RendererOptions holds future renderer configuration.

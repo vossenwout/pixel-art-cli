@@ -58,3 +58,6 @@
 - Tests/run: `go test ./...` and `go build ./cmd/pxcli` pass.
 - Completed T:26 rendering snapshot/dirty tracking: added render snapshot API with RGBA byte copy + dirty flag tracking on all mutations, plus unit tests for snapshot content/copy semantics and dirty reset.
 - Tests/run: `go test -race ./...` passes.
+- Implemented T:27 windowed renderer: added Ebiten renderer + windowed runtime wiring, headless/renderer selection in daemon command, and a scale calculation test.
+- Tests/run: `go test ./...` passes.
+- Note: `go build -tags=ebiten ./cmd/pxcli` fails in the container (missing GL/X11 dev libs via pkg-config); verify windowed build locally.
