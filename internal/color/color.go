@@ -6,6 +6,22 @@ import (
 	"strings"
 )
 
+var namedColors = map[string]color.RGBA{
+	"black":       {R: 0, G: 0, B: 0, A: 255},
+	"white":       {R: 255, G: 255, B: 255, A: 255},
+	"red":         {R: 255, G: 0, B: 0, A: 255},
+	"green":       {R: 0, G: 128, B: 0, A: 255},
+	"blue":        {R: 0, G: 0, B: 255, A: 255},
+	"yellow":      {R: 255, G: 255, B: 0, A: 255},
+	"orange":      {R: 255, G: 165, B: 0, A: 255},
+	"purple":      {R: 128, G: 0, B: 128, A: 255},
+	"cyan":        {R: 0, G: 255, B: 255, A: 255},
+	"magenta":     {R: 255, G: 0, B: 255, A: 255},
+	"gray":        {R: 128, G: 128, B: 128, A: 255},
+	"grey":        {R: 128, G: 128, B: 128, A: 255},
+	"transparent": {R: 0, G: 0, B: 0, A: 0},
+}
+
 // Error represents a color parsing error with a code and message.
 type Error struct {
 	Code    string
@@ -20,7 +36,7 @@ func (e Error) Error() string {
 }
 
 // Parse converts a color string into RGBA.
-// Supported formats: #rgb, #rrggbb, #rrggbbaa, and named colors red/blue/transparent.
+// Supported formats: #rgb, #rrggbb, #rrggbbaa, and named colors.
 func Parse(input string) (color.RGBA, error) {
 	trimmed := strings.TrimSpace(input)
 	if trimmed == "" {
@@ -28,13 +44,8 @@ func Parse(input string) (color.RGBA, error) {
 	}
 
 	lower := strings.ToLower(trimmed)
-	switch lower {
-	case "red":
-		return color.RGBA{R: 255, G: 0, B: 0, A: 255}, nil
-	case "blue":
-		return color.RGBA{R: 0, G: 0, B: 255, A: 255}, nil
-	case "transparent":
-		return color.RGBA{R: 0, G: 0, B: 0, A: 0}, nil
+	if named, ok := namedColors[lower]; ok {
+		return named, nil
 	}
 
 	if !strings.HasPrefix(lower, "#") {
