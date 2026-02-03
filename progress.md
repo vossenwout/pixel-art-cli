@@ -56,3 +56,5 @@
 - Tests/run: `go test ./...` passes.
 - Completed T:25 renderer abstraction: added Renderer interface + stub for non-ebiten builds, renderer availability checks, and CLI errors for `--headless=false` with tests for start/daemon.
 - Tests/run: `go test ./...` and `go build ./cmd/pxcli` pass.
+- Completed T:26 rendering snapshot/dirty tracking: added render snapshot API with RGBA byte copy + dirty flag tracking on all mutations, plus unit tests for snapshot content/copy semantics and dirty reset.
+- Tests/run: `go test -race ./...` passes.

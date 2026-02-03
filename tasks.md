@@ -386,10 +386,10 @@ The dirty flag should reset to false after a rendering snapshot is taken so the 
 
 **Acceptance criteria:**
 
-- [ ] Given a pixel change, when a rendering snapshot is requested, then it reflects the updated color and `len(pixels) = width * height * 4`
-- [ ] Given a rendering snapshot is returned, when the caller mutates the byte slice, then the canvas state is unchanged (copy semantics)
-- [ ] Given a rendering snapshot was taken and no further changes occurred, when the renderer checks the dirty flag, then it is false and it can skip image updates
-- [ ] Tests: `go test -race ./...` passes without data races
+- [x] Given a pixel change, when a rendering snapshot is requested, then it reflects the updated color and `len(pixels) = width * height * 4`
+- [x] Given a rendering snapshot is returned, when the caller mutates the byte slice, then the canvas state is unchanged (copy semantics)
+- [x] Given a rendering snapshot was taken and no further changes occurred, when the renderer checks the dirty flag, then it is false and it can skip image updates
+- [x] Tests: `go test -race ./...` passes without data races
 
 ### T:27: Implement Ebiten renderer (windowed, scaled)
 

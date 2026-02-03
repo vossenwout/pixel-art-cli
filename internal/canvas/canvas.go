@@ -28,6 +28,7 @@ type Canvas struct {
 	width  int
 	height int
 	pixels []color.RGBA
+	dirty  bool
 }
 
 // Snapshot captures a copy of the canvas pixels.
@@ -37,13 +38,20 @@ type Snapshot struct {
 	pixels []color.RGBA
 }
 
+// RenderSnapshot captures a copy of the canvas in RGBA byte form for rendering.
+type RenderSnapshot struct {
+	Width  int
+	Height int
+	Pixels []byte
+}
+
 // New creates a canvas with the provided dimensions.
 func New(width, height int) (*Canvas, error) {
 	if width <= 0 || height <= 0 {
 		return nil, Error{Code: "invalid_args", Message: "canvas dimensions must be positive"}
 	}
 	pixels := make([]color.RGBA, width*height)
-	return &Canvas{width: width, height: height, pixels: pixels}, nil
+	return &Canvas{width: width, height: height, pixels: pixels, dirty: true}, nil
 }
 
 // Width returns the canvas width in pixels.
@@ -69,6 +77,7 @@ func (c *Canvas) SetPixel(x, y int, value color.RGBA) error {
 		return err
 	}
 	c.pixels[idx] = value
+	c.dirty = true
 	return nil
 }
 
@@ -90,6 +99,7 @@ func (c *Canvas) Clear(value color.RGBA) {
 	for i := range c.pixels {
 		c.pixels[i] = value
 	}
+	c.dirty = true
 }
 
 // Snapshot returns a copy of the current canvas state.
@@ -99,6 +109,29 @@ func (c *Canvas) Snapshot() Snapshot {
 	pixels := make([]color.RGBA, len(c.pixels))
 	copy(pixels, c.pixels)
 	return Snapshot{width: c.width, height: c.height, pixels: pixels}
+}
+
+// RenderSnapshot returns a copy of the canvas as RGBA bytes and clears the dirty flag.
+func (c *Canvas) RenderSnapshot() RenderSnapshot {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	pixels := make([]byte, len(c.pixels)*4)
+	for i, value := range c.pixels {
+		offset := i * 4
+		pixels[offset] = value.R
+		pixels[offset+1] = value.G
+		pixels[offset+2] = value.B
+		pixels[offset+3] = value.A
+	}
+	c.dirty = false
+	return RenderSnapshot{Width: c.width, Height: c.height, Pixels: pixels}
+}
+
+// Dirty reports whether the canvas has changed since the last render snapshot.
+func (c *Canvas) Dirty() bool {
+	c.mu.RLock()
+	defer c.mu.RUnlock()
+	return c.dirty
 }
 
 // Restore replaces the current canvas state with the snapshot.
@@ -112,6 +145,7 @@ func (c *Canvas) Restore(snapshot Snapshot) error {
 		return Error{Code: "invalid_args", Message: "snapshot size does not match canvas"}
 	}
 	copy(c.pixels, snapshot.pixels)
+	c.dirty = true
 	return nil
 }
 
@@ -135,6 +169,7 @@ func (c *Canvas) FillRect(x, y, w, h int, value color.RGBA) error {
 			c.pixels[start+i] = value
 		}
 	}
+	c.dirty = true
 	return nil
 }
 
@@ -176,6 +211,7 @@ func (c *Canvas) Line(x1, y1, x2, y2 int, value color.RGBA) error {
 			y1 += sy
 		}
 	}
+	c.dirty = true
 	return nil
 }
 
