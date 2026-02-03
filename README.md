@@ -57,8 +57,9 @@ Utility:
 
 Notes:
 
-- Headless mode is the default; `--headless=false` is not implemented yet.
-- `--scale` is reserved for the future windowed mode and has no effect in headless mode.
+- Headless mode is the default; windowed mode is build-tagged (`ebiten`) for local use.
+- `--scale` is used only in windowed mode and has no effect in headless mode.
+- EC2 development is headless-only; GUI verification is done locally.
 - The hidden `pxcli daemon` subcommand is the internal entrypoint used by `pxcli start`.
 
 ## Defaults and configuration
@@ -123,5 +124,15 @@ Manual deletion should not be necessary for normal recovery.
 
 ## Headless-first development
 
-Headless mode is the default for development and CI. Windowed GUI support (Ebiten) will be added later
-without changing the protocol.
+Headless mode is the default for development and CI. Windowed GUI support (Ebiten) is the next milestone
+and will be enabled via a build tag without changing the protocol.
+
+## Windowed GUI (Ebiten, planned)
+
+Windowed mode will be enabled via the `ebiten` build tag to avoid GUI dependencies in CI/EC2.
+Expected local usage once implemented:
+
+```bash
+go build -tags=ebiten ./cmd/pxcli
+./pxcli start --headless=false --scale 10
+```

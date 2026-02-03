@@ -26,6 +26,12 @@ $INCLUDE_KEY_BEHAVIOR_AND_CONSTRAINTS (inputs/outputs, CLI command/flags, defaul
 - [ ] Error: given $BAD_INPUT, when $ACTION, then $ERROR_BEHAVIOR
 - [ ] Output: the CLI prints/returns $EXPECTED_OUTPUT (example included if needed)
 
+## Development constraints (Ebiten)
+
+- Development happens on docker container image without a display server; do not attempt to open an Ebiten window during development or tests.
+- GUI support must be build-tagged (e.g., `ebiten`) with a headless stub so `go test ./...` and `go build ./cmd/pxcli` work without GUI deps.
+- Automated tests must run headless; visual verification of the window is done locally.
+
 ## Example
 
 ### T:1: Create a new canvas
@@ -79,7 +85,7 @@ Parsing must ignore leading/trailing whitespace and treat 1+ ASCII whitespace ch
 **Acceptance criteria:**
 
 - [x] Given `set_pixel 10 10 #ff0000`, when it is parsed, then the command is `set_pixel` with args `["10","10","#ff0000"]`
-- [x] Given `  get_pixel   1\t2  `, when it is parsed, then the command is `get_pixel` with args `["1","2"]`
+- [x] Given `get_pixel   1\t2`, when it is parsed, then the command is `get_pixel` with args `["1","2"]`
 - [x] Error: given an empty/whitespace-only request line, when it is parsed, then the daemon returns `err invalid_command <message>`
 - [x] Tests: protocol parsing/formatting has unit tests and `go test ./...` passes
 
@@ -262,11 +268,11 @@ Print the daemon PID and exit; poll until the socket is accepting connections (o
 - [x] Error: given a daemon is already running, when I run `pxcli start`, then it exits non-zero and prints `err daemon_already_running <message>`
 - [x] Output: given `pxcli start --size 8x8 --headless`, when it succeeds, then subsequent client commands operate on an 8x8 canvas
 - [x] Tests: start command argument validation and daemon argv construction are unit tested and `go test ./...` passes
- - [x] Given no daemon is running, when I run `pxcli start`, then it exits zero, prints the daemon PID, and the daemon is ready to accept requests (headless)
- - [x] Error: given `--scale 0` (or `--scale -1`), when I run `pxcli start`, then it exits non-zero and prints a helpful validation error
- - [x] Error: given a daemon is already running, when I run `pxcli start`, then it exits non-zero and prints `err daemon_already_running <message>`
- - [x] Output: given `pxcli start --size 8x8 --headless`, when it succeeds, then subsequent client commands operate on an 8x8 canvas
- - [x] Tests: start command argument validation and daemon argv construction are unit tested and `go test ./...` passes
+- [x] Given no daemon is running, when I run `pxcli start`, then it exits zero, prints the daemon PID, and the daemon is ready to accept requests (headless)
+- [x] Error: given `--scale 0` (or `--scale -1`), when I run `pxcli start`, then it exits non-zero and prints a helpful validation error
+- [x] Error: given a daemon is already running, when I run `pxcli start`, then it exits non-zero and prints `err daemon_already_running <message>`
+- [x] Output: given `pxcli start --size 8x8 --headless`, when it succeeds, then subsequent client commands operate on an 8x8 canvas
+- [x] Tests: start command argument validation and daemon argv construction are unit tested and `go test ./...` passes
 
 ### T:18: Implement `pxcli stop` (request shutdown and wait)
 
@@ -357,7 +363,71 @@ Add/adjust tests and synchronization so the project passes the Go race detector.
 - [x] Given a running daemon, when I rapidly issue drawing commands while the daemon is processing requests, then it does not crash or deadlock
 - [x] Tests: `go test ./...` still passes
 
-## Future (GUI) work (not in scope for headless development)
+### T:25: Add renderer abstraction and headless stub
 
-- Add Ebiten renderer and window lifecycle behavior (`--scale`, close-to-exit)
-- Wire the renderer into the daemon runtime and reconcile concurrent access with the render loop
+**Description**
+Introduce a renderer interface with a clear contract (blocking `Run(ctx)` and a non-blocking `RequestClose()` that can be called from other goroutines).
+Add a non-GUI stub implementation that is compiled when the `ebiten` tag is not present.
+If `--headless=false` is requested without GUI support, return a clear error and exit non-zero (both `pxcli daemon` and `pxcli start`).
+
+**Acceptance criteria:**
+
+- [ ] Given a build without the `ebiten` tag, when `pxcli daemon --headless=false` or `pxcli start --headless=false` runs, then it exits non-zero with `err renderer_unavailable <message>` (or equivalent)
+- [ ] Given `--headless=true`, when the daemon starts, then no renderer is initialized and headless behavior is unchanged
+- [ ] Tests: `go test ./...` and `go build ./cmd/pxcli` pass in the headless container without GUI deps
+
+### T:26: Add canvas snapshot/dirty tracking for rendering
+
+**Description**
+Expose a thread-safe rendering snapshot API that is separate from the undo/redo `Snapshot` type used for history.
+The rendering snapshot should return `width`, `height`, and a copied RGBA byte slice in row-major order (`len = width * height * 4`, stride `width * 4`).
+Any mutating canvas operation should mark the canvas as dirty, including undo/redo/clear (e.g., `Restore` after undo/redo).
+The dirty flag should reset to false after a rendering snapshot is taken so the renderer can skip updates until the next mutation.
+
+**Acceptance criteria:**
+
+- [ ] Given a pixel change, when a rendering snapshot is requested, then it reflects the updated color and `len(pixels) = width * height * 4`
+- [ ] Given a rendering snapshot is returned, when the caller mutates the byte slice, then the canvas state is unchanged (copy semantics)
+- [ ] Given a rendering snapshot was taken and no further changes occurred, when the renderer checks the dirty flag, then it is false and it can skip image updates
+- [ ] Tests: `go test -race ./...` passes without data races
+
+### T:27: Implement Ebiten renderer (windowed, scaled)
+
+**Description**
+Implement the Ebiten renderer behind the `ebiten` build tag and render the canvas scaled by `--scale` using pixel-perfect (nearest neighbor) rendering.
+The window size should be `canvas_width * scale` by `canvas_height * scale`.
+The renderer should be constructed with a snapshot/dirty provider (from T:26) that is wired to the same canvas used by the command handler (no globals).
+In the render loop, if the dirty flag is set, call the rendering snapshot API and update the `ebiten.Image` (e.g., via `ReplacePixels`); if not dirty, skip image updates.
+`ebiten.RunGame` must run on the main goroutine; start the socket server and daemon coordination in goroutines before entering the render loop.
+
+**Acceptance criteria:**
+
+- [ ] Given a local build with `-tags=ebiten`, when the daemon starts in windowed mode, then an Ebiten window opens and shows the canvas
+- [ ] Given `--scale 10` on an 8x8 canvas, when windowed mode runs, then the window content renders an 80x80 pixel area with crisp blocks
+- [ ] Tests: `go build -tags=ebiten ./cmd/pxcli` succeeds locally
+
+### T:28: Coordinate window and daemon lifecycle
+
+**Description**
+Ensure that closing the Ebiten window triggers daemon shutdown, and that a `stop` command requests renderer close and shuts down the window cleanly.
+Define an explicit shutdown coordination path shared by the socket server, command handler, and renderer (e.g., context cancellation or a stop channel).
+`stop` should signal shutdown, call `RequestClose()` on the renderer, and return `ok` without waiting for the window to close.
+When the renderer exits (window closed), it must trigger the same daemon shutdown path so the socket server stops and PID/socket cleanup runs.
+All shutdown paths must remove PID/socket files and follow the same cleanup path as headless mode.
+
+**Acceptance criteria:**
+
+- [ ] Given the window is open, when `pxcli stop` is sent, then the window closes and the daemon exits cleanly
+- [ ] Given the user closes the window, then the daemon exits and removes PID/socket files
+- [ ] Tests: headless shutdown tests still pass without GUI deps
+
+### T:29: Document windowed mode usage and local verification
+
+**Description**
+Update documentation to explain windowed mode, the `ebiten` build tag, and the headless container development constraint.
+Include local verification steps for opening the window.
+
+**Acceptance criteria:**
+
+- [ ] Docs show how to build with `-tags=ebiten` and run `pxcli start --headless=false --scale <n>` locally
+- [ ] Docs state that headless container development is required and GUI verification must be done locally

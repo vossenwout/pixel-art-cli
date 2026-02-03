@@ -7,7 +7,7 @@ A local pixel art tool designed to be controlled programmatically by AI coding a
 ## Technology choices
 
 Language: Go
-Graphics (windowed mode, future): Ebiten (simple 2D library)
+Graphics (windowed mode): Ebiten (simple 2D library, build-tagged)
 Canvas buffer (headless): Go image.RGBA
 CLI parsing: Cobra
 IPC: Unix domain socket
@@ -30,7 +30,7 @@ Image export: Go's image/png package
                                            │ (optional)
                                            v
                             ┌─────────────────────────────┐
-                            │  Renderer (future)          │
+                            │  Renderer (windowed, optional)
                             │  - Ebiten window            │
                             │  - Displays canvas scaled   │
                             └─────────────────────────────┘
@@ -61,10 +61,11 @@ Simple line-based request/response protocol (one command per request)
 Example request: set_pixel 10 10 #ff0000
 Example response: ok
 
-1. Windowed renderer (future)
+1. Windowed renderer (Ebiten)
 
 Ebiten window that displays the canvas scaled up so pixels are visible
 Only used in windowed mode; headless mode runs without any display
+Compiled behind an `ebiten` build tag so headless builds do not require GUI deps
 
 ## Daemon Lifecycle
 
@@ -85,7 +86,15 @@ Before binding `/tmp/pxcli.sock`, the daemon checks if a PID file exists. If the
 - Headless is the default for development and CI.
 - No window is created; the daemon can run with no display environment.
 - `export` and `get_pixel` are the primary ways to observe output.
-- `--scale` is reserved for future windowed mode and has no effect in headless mode.
+- `--scale` is reserved for windowed mode and has no effect in headless mode.
+- EC2 development must remain headless; windowed verification is local only.
+
+## Windowed mode (Ebiten)
+
+- Enabled via `--headless=false` when built with the `ebiten` build tag.
+- Uses `--scale` to size the window (`canvas_size * scale`) with pixel-perfect rendering.
+- Closing the window exits the daemon; `stop` should close the window cleanly.
+- If the binary is built without the `ebiten` tag, starting with `--headless=false` returns a clear error.
 
 ## Canvas targeting (future)
 
