@@ -12,6 +12,7 @@ import (
 	"testing"
 
 	"pxcli/internal/client"
+	"pxcli/internal/testutil"
 )
 
 func TestBuildDaemonArgs(t *testing.T) {
@@ -48,7 +49,7 @@ func TestStartCmd_InvalidScale(t *testing.T) {
 }
 
 func TestStartCmd_StartsDaemonAndDetectsRunning(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 

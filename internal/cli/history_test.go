@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"pxcli/internal/client"
+	"pxcli/internal/testutil"
 )
 
 func TestHistoryCommands_FormatRequests(t *testing.T) {
@@ -66,7 +67,7 @@ func TestHistoryCommands_FormatRequests(t *testing.T) {
 }
 
 func TestUndoCmd_RevertsCanvasState(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 
@@ -137,7 +138,7 @@ func TestUndoCmd_RevertsCanvasState(t *testing.T) {
 }
 
 func TestRedoCmd_NoHistory(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 

@@ -91,6 +91,11 @@ Examples:
 - `get_pixel 10 10` -> `ok #ff0000ff`
 - `set_pixel -1 10 #ff0000` -> `err out_of_bounds x must be >= 0`
 
+Connection model:
+
+- The daemon handles one connection at a time; additional clients block until the active connection closes.
+- Each connection is exactly one request and one response line.
+
 ## Color formats
 
 Accepted input formats:

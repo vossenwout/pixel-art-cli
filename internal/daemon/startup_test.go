@@ -6,10 +6,12 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"pxcli/internal/testutil"
 )
 
 func TestEnsureDaemonReadyRemovesStalePIDAndSocket(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	pidPath := filepath.Join(dir, "pxcli.pid")
 	socketPath := filepath.Join(dir, "pxcli.sock")
 
@@ -49,7 +51,7 @@ func TestEnsureDaemonReadyRemovesStalePIDAndSocket(t *testing.T) {
 }
 
 func TestEnsureDaemonReadyActivePIDReturnsError(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	pidPath := filepath.Join(dir, "pxcli.pid")
 
 	if err := os.WriteFile(pidPath, []byte("5678\n"), 0o644); err != nil {
@@ -75,7 +77,7 @@ func TestEnsureDaemonReadyActivePIDReturnsError(t *testing.T) {
 }
 
 func TestEnsureDaemonReadyRemovesStaleSocket(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 
 	if err := os.WriteFile(socketPath, []byte("stale"), 0o644); err != nil {

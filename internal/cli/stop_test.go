@@ -9,10 +9,12 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"pxcli/internal/testutil"
 )
 
 func TestStopCmd_StopsDaemonAndRemovesFiles(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 
@@ -66,7 +68,7 @@ func TestStopCmd_StopsDaemonAndRemovesFiles(t *testing.T) {
 }
 
 func TestStopCmd_NoDaemon(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 
 	cmd := NewRootCmd("dev")

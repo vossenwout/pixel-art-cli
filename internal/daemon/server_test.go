@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"pxcli/internal/protocol"
+	"pxcli/internal/testutil"
 )
 
 type stubHandler struct {
@@ -22,7 +23,7 @@ func (s stubHandler) Handle(request protocol.Request) string {
 }
 
 func TestServerRespondsSingleLine(t *testing.T) {
-	socketPath := filepath.Join(t.TempDir(), "pxcli.sock")
+	socketPath := filepath.Join(testutil.TempDir(t), "pxcli.sock")
 	server, err := NewServer(socketPath, stubHandler{response: "ok"})
 	if err != nil {
 		t.Fatalf("unexpected error creating server: %v", err)
@@ -55,7 +56,7 @@ func TestServerRespondsSingleLine(t *testing.T) {
 }
 
 func TestServerInvalidRequestClosesConnection(t *testing.T) {
-	socketPath := filepath.Join(t.TempDir(), "pxcli.sock")
+	socketPath := filepath.Join(testutil.TempDir(t), "pxcli.sock")
 	server, err := NewServer(socketPath, stubHandler{response: "ok"})
 	if err != nil {
 		t.Fatalf("unexpected error creating server: %v", err)

@@ -12,10 +12,11 @@ import (
 
 	"pxcli/internal/canvas"
 	"pxcli/internal/history"
+	"pxcli/internal/testutil"
 )
 
 func TestRuntimeStopRequestCleansUp(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 
@@ -71,7 +72,7 @@ func TestRuntimeStopRequestCleansUp(t *testing.T) {
 }
 
 func TestRuntimeSignalShutdownWithoutClients(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 

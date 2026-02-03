@@ -9,10 +9,11 @@ import (
 	"testing"
 
 	"pxcli/internal/config"
+	"pxcli/internal/testutil"
 )
 
 func TestHeadlessProtocolIntegration(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 	cfg := config.New(

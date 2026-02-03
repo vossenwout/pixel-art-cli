@@ -10,10 +10,12 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"pxcli/internal/testutil"
 )
 
 func TestClientSendOK(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	listener, err := net.Listen("unix", socketPath)
 	if err != nil {
@@ -73,7 +75,7 @@ func TestClientSendOK(t *testing.T) {
 }
 
 func TestClientSendMissingSocket(t *testing.T) {
-	socketPath := filepath.Join(t.TempDir(), "missing.sock")
+	socketPath := filepath.Join(testutil.TempDir(t), "missing.sock")
 	client, err := New(socketPath, WithDialTimeout(50*time.Millisecond))
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
@@ -93,7 +95,7 @@ func TestClientSendMissingSocket(t *testing.T) {
 }
 
 func TestClientSendTimeout(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	listener, err := net.Listen("unix", socketPath)
 	if err != nil {

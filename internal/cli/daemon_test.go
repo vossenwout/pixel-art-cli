@@ -9,6 +9,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"pxcli/internal/testutil"
 )
 
 func TestParseCanvasSize(t *testing.T) {
@@ -72,7 +74,7 @@ func TestParseCanvasSize(t *testing.T) {
 }
 
 func TestDaemonCmd_StartsHeadlessRuntime(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 

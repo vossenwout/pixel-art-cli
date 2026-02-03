@@ -10,10 +10,11 @@ import (
 	"time"
 
 	"pxcli/internal/client"
+	"pxcli/internal/testutil"
 )
 
 func TestGetPixelCmd_PrintsColor(t *testing.T) {
-	dir := t.TempDir()
+	dir := testutil.TempDir(t)
 	socketPath := filepath.Join(dir, "pxcli.sock")
 	pidPath := filepath.Join(dir, "pxcli.pid")
 
