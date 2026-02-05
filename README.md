@@ -129,7 +129,7 @@ when you build with the `ebiten` tag, and it should be verified locally (not ins
 
 ## Windowed GUI (Ebiten)
 
-Windowed mode uses the `ebiten` build tag to avoid GUI dependencies in CI/EC2.
+Windowed mode uses the `ebiten` build tag to avoid GUI dependencies in CI/Development within docker container.
 Local usage:
 
 ```bash
