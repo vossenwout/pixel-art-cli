@@ -4,6 +4,11 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (example: v0.0.1)"
+        required: true
 
 permissions:
   contents: write
@@ -11,6 +16,8 @@ permissions:
 jobs:
   build-macos:
     runs-on: macos-latest
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -24,10 +31,13 @@ jobs:
           cache: true
 
       - name: Build macOS archives
-        env:
-          TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          TAG="${RELEASE_TAG}"
+          case "${TAG}" in
+            v*) ;;
+            *) echo "RELEASE_TAG must start with v (got ${TAG})"; exit 1 ;;
+          esac
           VERSION="${TAG#v}"
           mkdir -p dist
           for ARCH in amd64 arm64; do
@@ -45,6 +55,8 @@ jobs:
 
   build-linux:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -61,10 +73,13 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y xorg-dev libgl1-mesa-dev libasound2-dev
 
       - name: Build Linux archives
-        env:
-          TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          TAG="${RELEASE_TAG}"
+          case "${TAG}" in
+            v*) ;;
+            *) echo "RELEASE_TAG must start with v (got ${TAG})"; exit 1 ;;
+          esac
           VERSION="${TAG#v}"
           mkdir -p dist
           GOOS=linux GOARCH=amd64 CGO_ENABLED=1 \
@@ -83,6 +98,8 @@ jobs:
     needs:
       - build-macos
       - build-linux
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
@@ -104,13 +121,22 @@ jobs:
       - name: Create or update GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          TAG="${RELEASE_TAG}"
+          case "${TAG}" in
+            v*) ;;
+            *) echo "RELEASE_TAG must start with v (got ${TAG})"; exit 1 ;;
+          esac
           if gh release view "${TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
             gh release upload "${TAG}" --repo "${GITHUB_REPOSITORY}" release/*.tar.gz release/checksums.txt --clobber
           else
             gh release create "${TAG}" --repo "${GITHUB_REPOSITORY}" release/*.tar.gz release/checksums.txt --title "${TAG}" --generate-notes
+          fi
+          gh release edit "${TAG}" --repo "${GITHUB_REPOSITORY}" --draft=false
+          if [ "$(gh release view "${TAG}" --repo "${GITHUB_REPOSITORY}" --json isDraft -q '.isDraft')" = "true" ]; then
+            echo "Release is still draft after publish attempt"
+            exit 1
           fi
 
       - name: Checkout Homebrew tap
@@ -122,9 +148,13 @@ jobs:
 
       - name: Update Homebrew formula
         env:
-          TAG: ${{ github.ref_name }}
+          TAG: ${{ inputs.tag || github.ref_name }}
         run: |
           set -euo pipefail
+          case "${TAG}" in
+            v*) ;;
+            *) echo "TAG must start with v (got ${TAG})"; exit 1 ;;
+          esac
           VERSION="${TAG#v}"
           SHA_DARWIN_AMD64=$(sha256sum "release/pxcli_${VERSION}_darwin_amd64.tar.gz" | awk '{print $1}')
           SHA_DARWIN_ARM64=$(sha256sum "release/pxcli_${VERSION}_darwin_arm64.tar.gz" | awk '{print $1}')
@@ -183,6 +213,6 @@ jobs:
             echo "Formula unchanged; skipping commit."
             exit 0
           fi
-          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -m "pxcli ${GITHUB_REF_NAME}"
+          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -m "pxcli ${RELEASE_TAG}"
           git remote set-url origin "https://x-access-token:${HOMEBREW_TAP_GITHUB_TOKEN}@github.com/vossenwout/homebrew-pixel-art-cli.git"
           git push
