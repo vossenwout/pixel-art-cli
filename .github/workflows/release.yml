@@ -169,13 +169,20 @@ jobs:
           } > tap/Formula/pxcli.rb
 
       - name: Commit and push formula
+        env:
+          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           cd tap
+          if [ -z "${HOMEBREW_TAP_GITHUB_TOKEN}" ]; then
+            echo "HOMEBREW_TAP_GITHUB_TOKEN is not set"
+            exit 1
+          fi
           git add Formula/pxcli.rb
           if git diff --cached --quiet; then
             echo "Formula unchanged; skipping commit."
             exit 0
           fi
           git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -m "pxcli ${GITHUB_REF_NAME}"
+          git remote set-url origin "https://x-access-token:${HOMEBREW_TAP_GITHUB_TOKEN}@github.com/vossenwout/pixel-art-cli-homebrew.git"
           git push
