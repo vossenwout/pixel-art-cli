@@ -9,9 +9,10 @@ Windowed GUI is the default when built with `-tags=ebiten`. Use `--headless` to 
 
 macOS and Linux (Linuxbrew):
 
+Tap is auto-added when you install the fully qualified formula.
+
 ```bash
-brew tap vossenwout/pixel-art-cli-homebrew
-brew install pxcli
+brew install vossenwout/pixel-art-cli/pxcli
 ```
 
 Upgrade:
@@ -198,7 +199,7 @@ git push origin v0.1.0
 2) GitHub Actions builds and publishes:
 
 - Release artifacts on GitHub
-- Homebrew formula updates in `vossenwout/pixel-art-cli-homebrew`
+- Homebrew formula updates in `vossenwout/homebrew-pixel-art-cli`
 
 Required secrets:
 

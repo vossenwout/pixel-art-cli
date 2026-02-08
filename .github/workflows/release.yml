@@ -116,7 +116,7 @@ jobs:
       - name: Checkout Homebrew tap
         uses: actions/checkout@v4
         with:
-          repository: vossenwout/pixel-art-cli-homebrew
+          repository: vossenwout/homebrew-pixel-art-cli
           path: tap
           token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
 
@@ -184,5 +184,5 @@ jobs:
             exit 0
           fi
           git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -m "pxcli ${GITHUB_REF_NAME}"
-          git remote set-url origin "https://x-access-token:${HOMEBREW_TAP_GITHUB_TOKEN}@github.com/vossenwout/pixel-art-cli-homebrew.git"
+          git remote set-url origin "https://x-access-token:${HOMEBREW_TAP_GITHUB_TOKEN}@github.com/vossenwout/homebrew-pixel-art-cli.git"
           git push
