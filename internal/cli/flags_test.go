@@ -66,8 +66,8 @@ func TestStartCmd_HeadlessFlagDefault(t *testing.T) {
 	if flag == nil {
 		t.Fatalf("expected headless flag on start command")
 	}
-	if flag.DefValue != "true" {
-		t.Fatalf("expected headless default true, got %q", flag.DefValue)
+	if flag.DefValue != "false" {
+		t.Fatalf("expected headless default false, got %q", flag.DefValue)
 	}
 }
 
@@ -81,7 +81,7 @@ func TestDaemonCmd_HeadlessFlagDefault(t *testing.T) {
 	if flag == nil {
 		t.Fatalf("expected headless flag on daemon command")
 	}
-	if flag.DefValue != "true" {
-		t.Fatalf("expected headless default true, got %q", flag.DefValue)
+	if flag.DefValue != "false" {
+		t.Fatalf("expected headless default false, got %q", flag.DefValue)
 	}
 }

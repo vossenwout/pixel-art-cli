@@ -27,7 +27,7 @@ func TestConfigOverrides(t *testing.T) {
 		WithPIDPath("/tmp/test.pid"),
 		WithCanvasSize(8, 9),
 		WithScale(3),
-		WithHeadless(false),
+		WithHeadless(true),
 	)
 
 	if cfg.SocketPath != "/tmp/test.sock" {
@@ -42,7 +42,7 @@ func TestConfigOverrides(t *testing.T) {
 	if cfg.Scale != 3 {
 		t.Fatalf("expected scale override 3, got %d", cfg.Scale)
 	}
-	if cfg.Headless != false {
-		t.Fatalf("expected headless override false, got %v", cfg.Headless)
+	if cfg.Headless != true {
+		t.Fatalf("expected headless override true, got %v", cfg.Headless)
 	}
 }

@@ -137,7 +137,7 @@ func TestStartCmd_StartsDaemonAndDetectsRunning(t *testing.T) {
 	cmd2 := NewRootCmd("dev")
 	cmd2.SetOut(io.Discard)
 	cmd2.SetErr(io.Discard)
-	cmd2.SetArgs([]string{"start", "--socket", socketPath})
+	cmd2.SetArgs([]string{"start", "--headless", "--socket", socketPath})
 
 	err = cmd2.Execute()
 	if err == nil {

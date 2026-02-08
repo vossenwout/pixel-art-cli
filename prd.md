@@ -2,7 +2,7 @@
 
 ## Description
 
-A local pixel art tool designed to be controlled programmatically by AI coding agents (like Claude Code). It consists of a long-running daemon that runs headless by default (no UI) and accepts drawing commands over a Unix domain socket (request/response), plus a CLI that sends commands to the daemon. A windowed renderer can be added later without changing the protocol.
+A local pixel art tool designed to be controlled programmatically by AI coding agents (like Claude Code). It consists of a long-running daemon that runs with a windowed GUI by default when built with the `ebiten` tag and accepts drawing commands over a Unix domain socket (request/response), plus a CLI that sends commands to the daemon. Headless mode is available via `--headless` for CI/containers.
 
 ## Technology choices
 
@@ -41,7 +41,7 @@ Headless mode omits the renderer/window; `export` and `get_pixel` provide output
 
 1. Daemon (long-running process)
 
-Runs in headless mode by default (no UI); optional windowed renderer can be added later
+Runs in windowed mode by default when built with `ebiten`; headless mode is available via `--headless`
 Listens on a Unix domain socket
 Holds canvas state in memory (2D array of RGBA values)
 Accepts connections, reads a command, executes it, writes a response
@@ -83,7 +83,7 @@ Before binding `/tmp/pxcli.sock`, the daemon checks if a PID file exists. If the
 
 ## Headless mode
 
-- Headless is the default for development and CI.
+- Headless is opt-in for development and CI; pass `--headless`.
 - No window is created; the daemon can run with no display environment.
 - `export` and `get_pixel` are the primary ways to observe output.
 - `--scale` is reserved for windowed mode and has no effect in headless mode.
@@ -91,10 +91,10 @@ Before binding `/tmp/pxcli.sock`, the daemon checks if a PID file exists. If the
 
 ## Windowed mode (Ebiten)
 
-- Enabled via `--headless=false` when built with the `ebiten` build tag.
+- Windowed mode is the default when built with the `ebiten` build tag.
 - Uses `--scale` to size the window (`canvas_size * scale`) with pixel-perfect rendering.
 - Closing the window exits the daemon; `stop` should close the window cleanly.
-- If the binary is built without the `ebiten` tag, starting with `--headless=false` returns a clear error.
+- If the binary is built without the `ebiten` tag, starting without `--headless` returns a clear error.
 
 ## Canvas targeting (future)
 
@@ -124,7 +124,7 @@ The daemon accepts one CLI connection at a time. When a connection is active, su
 ## Expected API
 
 **Daemon control**
-pxcli start [--size 32x32] [--scale 10] [--headless]   # start daemon (defaults: 32x32 canvas, headless; scale used only in windowed mode)
+pxcli start [--size 32x32] [--scale 10] [--headless]   # start daemon (defaults: 32x32 canvas, windowed; scale used only in windowed mode)
 pxcli stop                                # shutdown the target daemon
 
 **Drawing**

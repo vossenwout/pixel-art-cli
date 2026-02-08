@@ -6,7 +6,7 @@ const (
 	DefaultCanvasWidth  = 32
 	DefaultCanvasHeight = 32
 	DefaultScale        = 10
-	DefaultHeadless     = true
+	DefaultHeadless     = false
 )
 
 // Config holds shared defaults and overrides for CLI and daemon behavior.
