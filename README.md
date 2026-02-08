@@ -1,44 +1,57 @@
 # pxcli
 
-pxcli is a pixel-art daemon and CLI that communicates over a Unix domain socket.
-It runs a long-lived daemon that keeps the canvas in memory while the CLI sends one-line commands
-and prints one-line responses. By default it runs with a windowed GUI when built with `-tags=ebiten`;
-pass `--headless` to run without a GUI.
+pxcli is a pixel-art daemon and CLI that communicates over a Unix domain socket. The daemon keeps
+the canvas in memory while the CLI sends one-line commands and prints one-line responses.
 
-## Quick start (windowed)
+Windowed GUI is the default when built with `-tags=ebiten`. Use `--headless` to run without a GUI.
 
-Build with GUI support:
+## Install (Homebrew)
+
+macOS and Linux (Linuxbrew):
+
+```bash
+brew tap vossenwout/pixel-art-cli-homebrew
+brew install pxcli
+```
+
+Upgrade:
+
+```bash
+brew upgrade pxcli
+```
+
+## Build from source
+
+Windowed (GUI):
 
 ```bash
 go build -tags=ebiten ./cmd/pxcli
 ```
 
-Start the daemon (defaults to 32x32, windowed):
-
-```bash
-./pxcli start
-```
-
-Draw, export, and stop:
-
-```bash
-./pxcli set_pixel 1 1 #ff0000
-./pxcli export out.png
-./pxcli stop
-```
-
-## Quick start (headless)
-
-Build without GUI dependencies:
+Headless (no GUI deps):
 
 ```bash
 go build ./cmd/pxcli
 ```
 
-Start the daemon in headless mode:
+## Quick start
+
+Windowed (default when built with `-tags=ebiten`):
+
+```bash
+./pxcli start
+./pxcli set_pixel 1 1 #ff0000
+./pxcli export out.png
+./pxcli stop
+```
+
+Headless (opt-in):
 
 ```bash
 ./pxcli start --headless
+./pxcli set_pixel 1 1 #ff0000
+./pxcli export out.png
+./pxcli stop
 ```
 
 ## CLI API
@@ -150,6 +163,15 @@ To target a non-default socket, pass `--socket` to every command:
 - If the binary is built without the `ebiten` tag, starting without `--headless` returns `err renderer_unavailable ...`.
 - The headless container/CI environment cannot open a window; build and run windowed mode locally.
 
+## Linux GUI requirements
+
+For the GUI on Linux, you need X11/OpenGL runtime libraries. Examples:
+
+- Debian/Ubuntu: `sudo apt-get install -y libx11-6 libxext6 libxrandr2 libxinerama1 libxcursor1 libxi6 libgl1`
+- Fedora: `sudo dnf install libX11 libXext libXrandr libXinerama libXcursor libXi mesa-libGL`
+
+If you are in a headless container, use `--headless`.
+
 ## Development
 
 Typical commands:
@@ -162,13 +184,33 @@ go build -tags=ebiten ./cmd/pxcli
 
 If you are developing in a headless container, use `--headless` when running the daemon.
 
+## Release process
+
+Releases are automated on tag push.
+
+1) Create and push a tag (example: `v0.1.0`):
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+2) GitHub Actions builds and publishes:
+
+- Release artifacts on GitHub
+- Homebrew formula updates in `vossenwout/pixel-art-cli-homebrew`
+
+Required secrets:
+
+- `HOMEBREW_TAP_GITHUB_TOKEN` with write access to the tap repo
+
 ## Export path behavior
 
 `pxcli export <filename.png>` resolves the filename to an absolute path before sending the request.
 That means relative paths are interpreted from the CLI's current working directory,
 not from where the daemon is running.
 
-## Troubleshooting stale PID/socket files
+## Troubleshooting stale pid/socket files
 
 If the daemon crashes or is killed, `/tmp/pxcli.pid` or `/tmp/pxcli.sock` may remain as stale pid/socket files:
 

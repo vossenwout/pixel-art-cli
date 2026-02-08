@@ -1,0 +1,48 @@
+version: 2
+
+project_name: pxcli
+
+builds:
+  - id: pxcli
+    main: ./cmd/pxcli
+    binary: pxcli
+    tags:
+      - ebiten
+    ldflags:
+      - -s -w -X pxcli/internal/buildinfo.Version={{.Version}}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - id: default
+    builds:
+      - pxcli
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    wrap_in_directory: true
+
+checksum:
+  name_template: checksums.txt
+
+brews:
+  - name: pxcli
+    repository:
+      owner: vossenwout
+      name: pixel-art-cli-homebrew
+    folder: Formula
+    homepage: https://github.com/vossenwout/pixel-art-cli
+    description: Pixel art daemon and CLI with windowed GUI
+    install: |
+      bin.install "pxcli"
+    test: |
+      system "#{bin}/pxcli", "--version"
+    commit_author:
+      name: goreleaser
+      email: goreleaser@users.noreply.github.com
+    token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
