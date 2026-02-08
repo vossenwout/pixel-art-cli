@@ -32,10 +32,7 @@ checksum:
 
 brews:
   - name: pxcli
-    repository:
-      owner: vossenwout
-      name: pixel-art-cli-homebrew
-    folder: Formula
+    directory: Formula
     homepage: https://github.com/vossenwout/pixel-art-cli
     description: Pixel art daemon and CLI with windowed GUI
     install: |
@@ -45,4 +42,7 @@ brews:
     commit_author:
       name: goreleaser
       email: goreleaser@users.noreply.github.com
-    token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    repository:
+      owner: vossenwout
+      name: pixel-art-cli-homebrew
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
