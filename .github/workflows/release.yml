@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  build-macos:
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -23,12 +23,159 @@ jobs:
           go-version-file: go.mod
           cache: true
 
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          distribution: goreleaser
-          version: latest
-          args: release --clean
+      - name: Build macOS archives
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOMEBREW_TAP_GITHUB_TOKEN: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          VERSION="${TAG#v}"
+          mkdir -p dist
+          for ARCH in amd64 arm64; do
+            GOOS=darwin GOARCH="${ARCH}" CGO_ENABLED=1 \
+              go build -tags=ebiten -ldflags "-s -w -X pxcli/internal/buildinfo.Version=${VERSION}" -o pxcli ./cmd/pxcli
+            tar -czf "dist/pxcli_${VERSION}_darwin_${ARCH}.tar.gz" pxcli
+            rm pxcli
+          done
+
+      - name: Upload macOS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-macos
+          path: dist/*.tar.gz
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Install GUI build dependencies
+        run: sudo apt-get update && sudo apt-get install -y xorg-dev libgl1-mesa-dev libasound2-dev
+
+      - name: Build Linux archives
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          VERSION="${TAG#v}"
+          mkdir -p dist
+          GOOS=linux GOARCH=amd64 CGO_ENABLED=1 \
+            go build -tags=ebiten -ldflags "-s -w -X pxcli/internal/buildinfo.Version=${VERSION}" -o pxcli ./cmd/pxcli
+          tar -czf "dist/pxcli_${VERSION}_linux_amd64.tar.gz" pxcli
+          rm pxcli
+
+      - name: Upload Linux artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-linux
+          path: dist/*.tar.gz
+
+  release:
+    runs-on: ubuntu-latest
+    needs:
+      - build-macos
+      - build-linux
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Collect artifacts
+        run: |
+          set -euo pipefail
+          mkdir -p release
+          find dist -name "*.tar.gz" -exec mv {} release/ \;
+
+      - name: Generate checksums
+        run: |
+          set -euo pipefail
+          cd release
+          sha256sum *.tar.gz > checksums.txt
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if gh release view "${TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release upload "${TAG}" --repo "${GITHUB_REPOSITORY}" release/*.tar.gz release/checksums.txt --clobber
+          else
+            gh release create "${TAG}" --repo "${GITHUB_REPOSITORY}" release/*.tar.gz release/checksums.txt --title "${TAG}" --generate-notes
+          fi
+
+      - name: Checkout Homebrew tap
+        uses: actions/checkout@v4
+        with:
+          repository: vossenwout/pixel-art-cli-homebrew
+          path: tap
+          token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+
+      - name: Update Homebrew formula
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          VERSION="${TAG#v}"
+          SHA_DARWIN_AMD64=$(sha256sum "release/pxcli_${VERSION}_darwin_amd64.tar.gz" | awk '{print $1}')
+          SHA_DARWIN_ARM64=$(sha256sum "release/pxcli_${VERSION}_darwin_arm64.tar.gz" | awk '{print $1}')
+          SHA_LINUX_AMD64=$(sha256sum "release/pxcli_${VERSION}_linux_amd64.tar.gz" | awk '{print $1}')
+
+          mkdir -p tap/Formula
+          {
+            printf '%s\n' "class Pxcli < Formula"
+            printf '%s\n' "  desc \"Pixel art daemon and CLI with windowed GUI\""
+            printf '%s\n' "  homepage \"https://github.com/vossenwout/pixel-art-cli\""
+            printf '%s\n' "  version \"${VERSION}\""
+            printf '%s\n' ""
+            printf '%s\n' "  on_macos do"
+            printf '%s\n' "    on_arm do"
+            printf '%s\n' "      url \"https://github.com/vossenwout/pixel-art-cli/releases/download/${TAG}/pxcli_${VERSION}_darwin_arm64.tar.gz\""
+            printf '%s\n' "      sha256 \"${SHA_DARWIN_ARM64}\""
+            printf '%s\n' "    end"
+            printf '%s\n' "    on_intel do"
+            printf '%s\n' "      url \"https://github.com/vossenwout/pixel-art-cli/releases/download/${TAG}/pxcli_${VERSION}_darwin_amd64.tar.gz\""
+            printf '%s\n' "      sha256 \"${SHA_DARWIN_AMD64}\""
+            printf '%s\n' "    end"
+            printf '%s\n' "  end"
+            printf '%s\n' ""
+            printf '%s\n' "  on_linux do"
+            printf '%s\n' "    on_intel do"
+            printf '%s\n' "      url \"https://github.com/vossenwout/pixel-art-cli/releases/download/${TAG}/pxcli_${VERSION}_linux_amd64.tar.gz\""
+            printf '%s\n' "      sha256 \"${SHA_LINUX_AMD64}\""
+            printf '%s\n' "    end"
+            printf '%s\n' "    on_arm do"
+            printf '%s\n' "      odie \"pxcli Linux arm64 binaries are not available yet\""
+            printf '%s\n' "    end"
+            printf '%s\n' "  end"
+            printf '%s\n' ""
+            printf '%s\n' "  def install"
+            printf '%s\n' "    bin.install \"pxcli\""
+            printf '%s\n' "  end"
+            printf '%s\n' ""
+            printf '%s\n' "  test do"
+            printf '%s\n' "    system \"#{bin}/pxcli\", \"--version\""
+            printf '%s\n' "  end"
+            printf '%s\n' "end"
+          } > tap/Formula/pxcli.rb
+
+      - name: Commit and push formula
+        run: |
+          set -euo pipefail
+          cd tap
+          git add Formula/pxcli.rb
+          if git diff --cached --quiet; then
+            echo "Formula unchanged; skipping commit."
+            exit 0
+          fi
+          git -c user.name="github-actions" -c user.email="github-actions@users.noreply.github.com" commit -m "pxcli ${GITHUB_REF_NAME}"
+          git push
