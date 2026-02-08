@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,9 +22,6 @@ jobs:
         with:
           go-version-file: go.mod
           cache: true
-
-      - name: Install Linux GUI dependencies
-        run: sudo apt-get update && sudo apt-get install -y xorg-dev libgl1-mesa-dev libasound2-dev libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libxkbcommon-dev libxxf86vm-dev
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6

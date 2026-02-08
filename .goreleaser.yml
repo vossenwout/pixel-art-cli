@@ -3,7 +3,21 @@ version: 2
 project_name: pxcli
 
 builds:
-  - id: pxcli
+  - id: pxcli_darwin
+    main: ./cmd/pxcli
+    binary: pxcli
+    tags:
+      - ebiten
+    ldflags:
+      - -s -w -X pxcli/internal/buildinfo.Version={{.Version}}
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+  - id: pxcli_linux
     main: ./cmd/pxcli
     binary: pxcli
     tags:
@@ -13,7 +27,6 @@ builds:
     env:
       - CGO_ENABLED=0
     goos:
-      - darwin
       - linux
     goarch:
       - amd64
@@ -21,9 +34,11 @@ builds:
 
 archives:
   - id: default
-    builds:
-      - pxcli
-    format: tar.gz
+    ids:
+      - pxcli_darwin
+      - pxcli_linux
+    formats:
+      - tar.gz
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     wrap_in_directory: true
 
