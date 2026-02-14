@@ -2,6 +2,8 @@
 
 pxcli is a cli tool meant for AI agents (claude code, opencode, codex) to draw pixel art.
 
+It was created using a ralph loop see `ralph.sh` and an example agent is given in `.opencode/agents/artists.md`
+
 ## Install (Homebrew)
 
 macOS and Linux (Linuxbrew):
